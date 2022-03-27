@@ -108,6 +108,13 @@
 
 - hosts: masters
   tasks:
+    - name: Download weather data
+      get_url:
+        url: "https://drive.google.com/u/0/uc?id=1ik0QRq96hFwyaMMB0Q7yOmbg_PiefDar&export=download"
+        dest: ~/weather_data.txt
+
+- hosts: masters
+  tasks:
     - name: Format HDFS
       shell: hdfs namenode -format -nonInteractive
     - name: Start HDFS
