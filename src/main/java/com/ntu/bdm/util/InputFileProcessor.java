@@ -27,11 +27,11 @@ public class InputFileProcessor extends Configured implements Tool {
 //  Set RecordLenght configuration parameter so that is it accessible to
 //  individual mappers
         Configuration conf = getConf();
-//        conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
-//        conf.set("mapreduce.framework.name", "yarn");
+        conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
+        conf.set("mapreduce.framework.name", "yarn");
         conf.set("fs.default.name","hdfs://3.1.36.136:9000");
-        String inPath = "/test/input/SingaporeWeather.csv";
-        String outPath = "/test/intermediate/sg/";
+        String inPath = args[0];
+        String outPath = args[1];
         Job job = Job.getInstance(conf, "Input Format");
 
 //  We do not need reducers for this demonstration
