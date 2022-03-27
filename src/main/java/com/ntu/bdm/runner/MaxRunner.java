@@ -13,13 +13,11 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class MaxRunner {
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+    public MaxRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
         conf.set("fs.default.name","hdfs://3.1.36.136:9000");
         conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
-        String inPath = args[0];
-        String outPath = args[1];
         Job job = Job.getInstance(conf, "Max Temp");
         job.setJarByClass(MaxRunner.class);
         job.setMapperClass(MaxMapper.class);
