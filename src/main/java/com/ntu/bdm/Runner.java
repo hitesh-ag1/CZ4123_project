@@ -69,7 +69,7 @@ public class Runner {
             if (cmd.hasOption("o")) {
                 String opt_config = cmd.getOptionValue("outputpath");
                 System.out.println("Output path: " + opt_config);
-                inpath = opt_config;
+                outpath = opt_config;
             } else System.out.println("Output path not found");
         } catch (ParseException e) {
             System.out.println(e.getMessage());

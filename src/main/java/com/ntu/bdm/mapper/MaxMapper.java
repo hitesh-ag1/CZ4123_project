@@ -16,11 +16,11 @@ public class MaxMapper extends Mapper<Object, Text, Text, FloatWritable> {
         String line = value.toString();
         String[] stringArr = line.split(",");
         String yearMonth = stringArr[1].substring(0, 7);
-        String location = stringArr[2];
+        String location = stringArr[0];
+        if (stringArr[2].equals("M")) stringArr[2] = "NaN";
         if (stringArr[3].equals("M")) stringArr[3] = "NaN";
-        if (stringArr[4].equals("M")) stringArr[4] = "NaN";
-        float temp = Float.parseFloat(stringArr[3]);
-        String humidity = stringArr[4];
+        float temp = Float.parseFloat(stringArr[2]);
+        String humidity = stringArr[3];
         word.set(yearMonth + "-" + location);
         context.write(word, new FloatWritable(temp));
     }
