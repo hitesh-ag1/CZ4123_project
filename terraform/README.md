@@ -30,3 +30,8 @@ If error with SSH
 ```
 ssh-keygen -R 3.1.36.136
 ```
+
+Add data to Hadoop-Master
+```
+wget -O weather_data.txt https://drive.google.com/u/0/uc?id=1ik0QRq96hFwyaMMB0Q7yOmbg_PiefDar&export=download
+```
