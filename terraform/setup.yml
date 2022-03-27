@@ -92,6 +92,7 @@
         - <property><name>yarn.app.mapreduce.am.env</name><value>HADOOP_MAPRED_HOME=/usr/share/hadoop</value></property>
         - <property><name>mapreduce.map.env</name><value>HADOOP_MAPRED_HOME=/usr/share/hadoop</value></property>
         - <property><name>mapreduce.reduce.env</name><value>HADOOP_MAPRED_HOME=/usr/share/hadoop</value></property>
+        - <property><name>mapreduce.application.classpath</name><value>/usr/share/hadoop/share/hadoop/common/lib/*:/usr/share/hadoop/share/hadoop/common/*:/usr/share/hadoop/share/hadoop/hdfs:/usr/share/hadoop/share/hadoop/hdfs/lib/*:/usr/share/hadoop/share/hadoop/hdfs/*:/usr/share/hadoop/share/hadoop/mapreduce/*:/usr/share/hadoop/share/hadoop/yarn:/usr/share/hadoop/share/hadoop/yarn/lib/*:/usr/share/hadoop/share/hadoop/yarn/*</value></property>
     - name: Edit yarn-site.xml
       xml:
         path: $HADOOP_CONF_DIR/yarn-site.xml
