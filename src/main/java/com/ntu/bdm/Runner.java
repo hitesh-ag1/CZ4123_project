@@ -14,7 +14,7 @@ public class Runner {
 
     public static void main(String[] args) throws Exception {
         getCommandLineArguments(args);
-        if (Objects.equals(className, "max")) {
+        if (className.equals("max")) {
             new MaxRunner(inpath, outpath);
         }
         else if (className.equals("init")){
@@ -70,13 +70,13 @@ public class Runner {
                 String opt_config = cmd.getOptionValue("inputpath");
                 System.out.println("Input path: " + opt_config);
                 inpath = opt_config;
-            } else System.out.println("Input path not found");
+            } else throw new Error("Input path arguments not found");
 
             if (cmd.hasOption("o")) {
                 String opt_config = cmd.getOptionValue("outputpath");
                 System.out.println("Output path: " + opt_config);
                 outpath = opt_config;
-            } else System.out.println("Output path not found");
+            } else throw new Error("Input path arguments not found");
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             helper.printHelp("Usage:", options);

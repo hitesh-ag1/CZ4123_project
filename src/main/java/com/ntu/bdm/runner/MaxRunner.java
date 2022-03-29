@@ -20,6 +20,7 @@ public class MaxRunner {
         conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
         Job job = Job.getInstance(conf, "Max Temp");
+
         job.setJarByClass(MaxRunner.class);
         job.setMapperClass(MaxMapper.class);
         job.setReducerClass(MaxReducer.class);
@@ -30,6 +31,7 @@ public class MaxRunner {
         filesystem.delete(new Path(outPath), true);
 
         FileInputFormat.addInputPath(job, new Path(inPath));
+//      KeyValueTextInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
