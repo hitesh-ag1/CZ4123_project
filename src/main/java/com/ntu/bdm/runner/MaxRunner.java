@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.ntu.bdm.mapper.MaxMapper;
 import com.ntu.bdm.reducer.MaxReducer;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
@@ -24,6 +25,10 @@ public class MaxRunner {
         job.setReducerClass(MaxReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FloatWritable.class);
+
+        FileSystem filesystem = FileSystem.get(conf);
+        filesystem.delete(new Path(outPath), true);
+
         FileInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
