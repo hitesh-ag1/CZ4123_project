@@ -1,7 +1,9 @@
 package com.ntu.bdm;
 
 import com.ntu.bdm.runner.MaxRunner;
+import com.ntu.bdm.util.InputFileProcessor;
 import org.apache.commons.cli.*;
+import org.apache.hadoop.util.ToolRunner;
 
 import java.util.Objects;
 
@@ -14,6 +16,10 @@ public class Runner {
         getCommandLineArguments(args);
         if (Objects.equals(className, "max")) {
             new MaxRunner(inpath, outpath);
+        }
+        else if (className.equals("init")){
+            String[] arg = {inpath,outpath, "4"};
+            ToolRunner.run(new InputFileProcessor(), arg);
         }
     }
 
