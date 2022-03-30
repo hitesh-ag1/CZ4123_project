@@ -146,3 +146,5 @@
       shell: start-dfs.sh
     - name: Start YARN
       shell: nohup start-yarn.sh
+    - name: Start MapReduce JobHistory Server
+      shell: nohup mapred --daemon start historyserver
