@@ -19,7 +19,7 @@ public class MaxRunner {
         conf.set("fs.default.name","hdfs://3.1.36.136:9000");
         conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
-        Job job = Job.getInstance(conf, "Max Temp");
+        Job job = Job.getInstance(conf, "Min Max Temp");
 
         job.setJarByClass(MaxRunner.class);
         job.setMapperClass(MaxMapper.class);
