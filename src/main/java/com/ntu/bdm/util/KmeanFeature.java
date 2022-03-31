@@ -9,9 +9,11 @@ import java.io.IOException;
 public class KmeanFeature implements Writable {
 
     private float[] array = null;
+    private int numPoints;
 
     public KmeanFeature(float[] array) {
         this.array = array;
+        this.numPoints = 1;
     }
 
     public KmeanFeature(String string) {
@@ -20,6 +22,7 @@ public class KmeanFeature implements Writable {
         for (int i = 0; i < arr.length; i++){
             this.array[i] = Float.parseFloat(arr[i]);
         }
+        this.numPoints = 1;
     }
 
     public KmeanFeature(int len){
@@ -50,5 +53,20 @@ public class KmeanFeature implements Writable {
             dist += (this.array[i] - point.array[i]);
         }
         return dist;
+    }
+
+    private void sum(KmeanFeature point){
+        for (int i = 0; i < this.array.length; i++){
+            this.array[i] += point.array[i];
+        }
+        this.numPoints += point.numPoints;
+    }
+
+    private void calculateCentroid(){
+        for (int i = 0; i < this.array.length; i++){
+            float temp = this.array[i] / this.numPoints;
+            this.array[i] = temp;
+        }
+        this.numPoints = 1;
     }
 }

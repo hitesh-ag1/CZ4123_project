@@ -19,18 +19,18 @@ public class PointMapper extends Mapper<Object, Text, Text, Text> {
         String location = oldKey[1];
         String field = oldKey[2];
 
-        String[] labels = {"MAX", "MIN"};
+        String[] stats = {"MAX", "MIN"};
         String[] stringArr = line.split(",");
 
         if (stringArr.length == 3) {
-            labels = new String[]{"MEAN", "MEDIAN", "SD"};
+            stats = new String[]{"MEAN", "MEDIAN", "SD"};
         }
 
         for (int i = 0; i < stringArr.length; i++) {
             float f = Float.parseFloat(stringArr[i]);
-            String label = labels[i];
-            String newKey = String.format("%s_%s_%s", location, field, label);
-            String newVal = String.format("%s,%f", idx, f);
+            String stat = stats[i];
+            String newKey = String.format("%s_%s_%s", location, field, stat);
+            String newVal = String.format("%s_%f", idx, f);
             context.write(new Text(newKey), new Text(newVal));
         }
     }
