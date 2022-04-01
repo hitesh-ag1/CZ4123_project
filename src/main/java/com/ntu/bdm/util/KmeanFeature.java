@@ -5,6 +5,7 @@ import org.apache.hadoop.io.Writable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class KmeanFeature implements Writable {
@@ -56,16 +57,17 @@ public class KmeanFeature implements Writable {
     }
 
 
-    private void calculateCentroid(KmeanFeature[] points){
-        for (int j = 0; j < points[0].array.length; j++){
+    public void calculateCentroid(ArrayList<KmeanFeature> points){
+        if (points.isEmpty()) return;
+        for (int j = 0; j < points.get(0).array.length; j++){
             float sum = 0F;
             int ctr = 0;
-            for (int i = 0; i < points.length; i++){
-                sum += points[i].array[j];
-                if (!Float.isNaN(points[i].array[j])){
+            for (int i = 0; i < points.size(); i++){
+                sum += points.get(i).array[j];
+                if (!Float.isNaN(points.get(i).array[j])){
                     ctr += 1;
                 }
-            this.array[j] = sum / ctr;
+            this.array[j] = sum / (float) ctr;
         }
         }
         this.numPoints = 1;
