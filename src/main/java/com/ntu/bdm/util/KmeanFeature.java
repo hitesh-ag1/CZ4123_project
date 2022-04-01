@@ -18,7 +18,8 @@ public class KmeanFeature implements Writable {
         this.numPoints = 1;
     }
 
-    public KmeanFeature(String[] arr) {
+    public KmeanFeature(String string) {
+        String[] arr = string.split(",");
         this.array = new float[arr.length];
         for (int i = 0; i < arr.length; i++){
             this.array[i] = Float.parseFloat(arr[i]);
@@ -48,7 +49,7 @@ public class KmeanFeature implements Writable {
         }
     }
 
-    public float distance(KmeanFeature point){
+    private float distance(KmeanFeature point){
         float dist = 0F;
         for (int i = 0; i < this.array.length; i++){
             dist += (this.array[i] - point.array[i]);
