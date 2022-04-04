@@ -133,10 +133,14 @@
 
 - hosts: masters
   tasks:
-    - name: Download weather data
+    - name: Download example without index
       get_url:
-        url: "https://drive.google.com/u/0/uc?id=1ik0QRq96hFwyaMMB0Q7yOmbg_PiefDar&export=download"
-        dest: ~/weather_data.txt
+        url: "https://drive.google.com/u/0/uc?id=1GJgb6oeZ3RZMZALVbzUBQQhAnJOkY1S8&export=download"
+        dest: ~/exampleWithoutIndex.csv
+    - name: Download example with index
+      get_url:
+        url: "https://drive.google.com/u/0/uc?id=1AtpmIoY6o7kynwWGhYs2bGAk81HPqHJb&export=download"
+        dest: ~/exampleWithIndex.csv
 
 - hosts: masters
   tasks:
