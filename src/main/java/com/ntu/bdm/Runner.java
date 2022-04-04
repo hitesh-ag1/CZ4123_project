@@ -30,6 +30,9 @@ public class Runner {
             case "kmean":
                 new KmeanRunner(inpath, outpath);
                 break;
+            case "output":
+                new OutputRunner(inpath, outpath);
+                break;
 
             case "init":
                 String[] arg = {inpath, outpath, "4"};
@@ -99,6 +102,10 @@ public class Runner {
                     case "KMEAN":
                         System.out.println("Running kmean clustering");
                         className = "kmean";
+                        break;
+                    case "OUTPUT":
+                        System.out.println("Organising into final output format");
+                        className = "output";
                         break;
                     default:
                         System.out.println("Running as Unknown");
