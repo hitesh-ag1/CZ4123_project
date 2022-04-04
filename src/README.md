@@ -10,3 +10,4 @@
 | -c       | Class name to run    | -       | init, max, min, cluster              |
 | -i       | Input file location  | -       | /user/input, /user/intermediate/max  |
 | -o       | Output file location | -       | /user/output, /user/intermediate/max |
+

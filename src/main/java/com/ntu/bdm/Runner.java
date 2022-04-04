@@ -26,6 +26,7 @@ public class Runner {
                 String[] arg = {inpath, outpath, "4"};
                 ToolRunner.run(new InputFileProcessor(), arg);
                 break;
+
         }
     }
 
@@ -81,6 +82,7 @@ public class Runner {
                         System.out.println("Running as Unknown");
                         break;
                 }
+
             }
             if (cmd.hasOption("i")) {
                 String opt_config = cmd.getOptionValue("inputpath");
