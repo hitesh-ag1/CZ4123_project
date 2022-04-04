@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 
-public class KmeanMapper extends Mapper<Object, Text, IntWritable, Text> {
+public class KmeanMapper extends Mapper<Object, Text, Text, Text> {
     private KmeanFeature[] centroids;
     private int numCluster;
     @Override
@@ -20,23 +20,25 @@ public class KmeanMapper extends Mapper<Object, Text, IntWritable, Text> {
         this.centroids = new KmeanFeature[numCluster];
         for (int i = 0; i < numCluster; i++){
             String[] s = context.getConfiguration().getStrings("centroid-" + i);
-            this.centroids[i] = new KmeanFeature(Arrays.toString(s));
+            String str = Arrays.toString(s);
+            System.out.println(str);
+            this.centroids[i] = new KmeanFeature(str.substring(2, str.length()-2));
         }
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
-        // TODO - Check how to read into key val pairs
+        System.out.printf("Key: %s \n",key);
+        System.out.printf("Value: %s \n",value);
         String[] keyVal = value.toString().split("\\t");
 
-        String[] oldKey = keyVal[0].split("_");
-        String location = oldKey[1];
+        String location = keyVal[0];
 
         String line = keyVal[1];
         String[] stringArr = line.split(",");
         KmeanFeature point = new KmeanFeature(stringArr.length);
 
         for (int i = 0; i < stringArr.length; i++){
-            point.set(i, Float.parseFloat(stringArr[i]));
+            point.set(i, Float.parseFloat(stringArr[i].substring(1, stringArr[i].length()-1)));
         }
 
         float min = Float.POSITIVE_INFINITY;
@@ -51,8 +53,8 @@ public class KmeanMapper extends Mapper<Object, Text, IntWritable, Text> {
                 min = curDist;
             }
         }
-        Text newVal = new Text(String.format("%s_%s", location, point));
-        context.write(new IntWritable(nearestCentroid), newVal);
+        Text newVal = new Text(String.format("%s", point));
+        context.write(new Text(String.valueOf(nearestCentroid)), newVal);
     }
 
 }

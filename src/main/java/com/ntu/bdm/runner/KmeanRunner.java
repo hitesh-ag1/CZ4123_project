@@ -16,6 +16,7 @@ import org.checkerframework.checker.units.qual.K;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -44,7 +45,7 @@ public class KmeanRunner {
 
         // TODO - Pass in command line arguments
         int numCluster = 3;
-        int numYear = 5;
+        int numYear = 1;
         int numField = 2;
         int lengthOfFeatures = 12 * numField * numYear;
         int numIteration = 2;
@@ -54,13 +55,14 @@ public class KmeanRunner {
         conf.setInt("numField", numField);
         conf.setInt("lengthOfFeatures", lengthOfFeatures);
 
-        KmeanFeature[] oldCentroid = generateCentroid(lengthOfFeatures, numCluster);
+        KmeanFeature[] newCentroid = generateCentroid(lengthOfFeatures, numCluster);
+
         for (int i=0; i < numCluster; i++){
             conf.unset("centroid-" + i);
-            conf.set("centroid-" + i, oldCentroid[i].toString());
+            conf.set("centroid-" + i, newCentroid[i].toString());
         }
 
-        KmeanFeature[] newCentroid = new KmeanFeature[numCluster];
+
         int ctr = 0;
         while (!stop) {
             Job job = Job.getInstance(conf, "Kmean_" + ctr);
@@ -76,7 +78,6 @@ public class KmeanRunner {
             filesystem.delete(new Path(outPath), true);
 
             FileInputFormat.addInputPath(job, new Path(inPath));
-//      KeyValueTextInputFormat.addInputPath(job, new Path(inPath));
             FileOutputFormat.setOutputPath(job, new Path(outPath));
             boolean status = job.waitForCompletion(true);
 
@@ -85,15 +86,17 @@ public class KmeanRunner {
                 System.exit(1);
             }
 
-            for (int i = 0; i < numCluster; i++){
-                oldCentroid[i] = KmeanFeature.duplicate(newCentroid[i]);
+            KmeanFeature[] tmp = new KmeanFeature[numCluster];
+            for (int i =0; i < numCluster; i++){
+                tmp[i] = KmeanFeature.duplicate(newCentroid[i]);
             }
-
-            newCentroid = readCentroid(outPath, conf, numCluster);
+            newCentroid = readCentroid(outPath, conf, numCluster, tmp);
+            System.out.println(ctr);
+            System.out.println(Arrays.toString(newCentroid));
 
 
             // TODO - Threshold to stop based on distance
-            stop = ctr >= numIteration;
+            stop = ctr >= numIteration-1;
             for (int i=0; i < numCluster; i++){
                 conf.unset("centroid-" + i);
                 conf.set("centroid-" + i, newCentroid[i].toString());
@@ -106,6 +109,7 @@ public class KmeanRunner {
 
     private KmeanFeature[] generateCentroid(int len, int numClus) {
         KmeanFeature[] centroids = new KmeanFeature[numClus];
+        for (int i = 0 ; i < numClus; i++ ) centroids[i] = new KmeanFeature(len);
         HashMap<Float, Boolean> position = new HashMap<>();
 
         int size = 0;
@@ -120,21 +124,23 @@ public class KmeanRunner {
         return centroids;
     }
 
-    private KmeanFeature[] readCentroid(String inPath, Configuration conf, int numCluster) throws IOException {
-        KmeanFeature[] points = new KmeanFeature[numCluster];
+    private KmeanFeature[] readCentroid(String inPath, Configuration conf,int numCluster, KmeanFeature[] old) throws IOException {
         FileSystem hdfs = FileSystem.get(conf);
         FileStatus[] statuses = hdfs.listStatus(new Path(inPath));
 
         for (int i = 0; i < statuses.length; i++){
            if(!statuses[i].getPath().toString().endsWith("_SUCCESS")){
                BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(statuses[i].getPath())));
-               String[] line = br.readLine().split("\\t");
-               int centroidId = Integer.parseInt(line[0]);
-               String centroid = line[1];
-               points[i] = new KmeanFeature(centroid);
+               while (br.readLine() != null) {
+                   String[] line = br.readLine().split("\\t");
+                   int centroidId = Integer.parseInt(line[0]);
+                   String centroid = line[1];
+                   old[centroidId] = new KmeanFeature(centroid.substring(1, centroid.length() - 1));
+               }
+               br.close();
            }
         }
 
-        return points;
+        return old;
     }
 }

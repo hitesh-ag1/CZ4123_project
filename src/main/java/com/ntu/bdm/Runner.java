@@ -1,9 +1,6 @@
 package com.ntu.bdm;
 
-import com.ntu.bdm.runner.MaxRunner;
-import com.ntu.bdm.runner.MeanRunner;
-import com.ntu.bdm.runner.PointRunner;
-import com.ntu.bdm.runner.SelectedFieldRunner;
+import com.ntu.bdm.runner.*;
 import com.ntu.bdm.util.InputFileProcessor;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.util.ToolRunner;
@@ -30,6 +27,9 @@ public class Runner {
             case "select":
                 new SelectedFieldRunner(inpath, outpath);
                 break;
+            case "kmean":
+                new KmeanRunner(inpath, outpath);
+                break;
 
             case "init":
                 String[] arg = {inpath, outpath, "4"};
@@ -52,6 +52,7 @@ public class Runner {
 
         config = OptionBuilder
                 .hasArg()
+                .isRequired()
                 .withLongOpt("inputpath")
                 .withDescription("The input path to read the data")
                 .create("i");
@@ -59,6 +60,7 @@ public class Runner {
 
         config = OptionBuilder
                 .hasArg()
+                .isRequired()
                 .withLongOpt("outputpath")
                 .withDescription("The output path to read the data")
                 .create("o");
@@ -93,6 +95,10 @@ public class Runner {
                     case "SELECT":
                         System.out.println("Filter and flatten the user input field");
                         className = "select";
+                        break;
+                    case "KMEAN":
+                        System.out.println("Running kmean clustering");
+                        className = "kmean";
                         break;
                     default:
                         System.out.println("Running as Unknown");
