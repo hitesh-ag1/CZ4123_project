@@ -7,16 +7,16 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 
-public class PointReducer extends Reducer<Text, FloatWritable, Text, KmeanFeature> {
+public class PointReducer extends Reducer<Text, Text, Text, Text> {
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         // TODO Need to be dynamic = numMonths
-        KmeanFeature point = new KmeanFeature(60);
+        KmeanFeature point = new KmeanFeature(12);
         for (Text value : values) {
             String[] v = value.toString().split("_");
             int idx = Integer.parseInt(v[0]);
             float f = Float.parseFloat(v[1]);
-            point.set(idx, f);
+            point.set(idx-1, f);
         }
-        context.write(key, point);
+        context.write(key, new Text(point.toString()));
     }
 }

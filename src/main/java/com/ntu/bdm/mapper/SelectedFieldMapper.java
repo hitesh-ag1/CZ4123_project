@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class SelectedFieldMapper extends Mapper<Text, KmeanFeature, Text, Text> {
+public class SelectedFieldMapper extends Mapper<Object, Text, Text, Text> {
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
         String[] keyVal = value.toString().split("\\t");
         String line = keyVal[1];
@@ -19,7 +19,7 @@ public class SelectedFieldMapper extends Mapper<Text, KmeanFeature, Text, Text> 
         String location = oldKey[0];
         String field = oldKey[1];
         String stat = oldKey[2];
-        HashMap<String, Integer> selected = null;
+        HashMap<String, Integer> selected = new HashMap<>();
 
 //      #TODO This need to be dynamic
         selected.put("HUM_MAX", 0);

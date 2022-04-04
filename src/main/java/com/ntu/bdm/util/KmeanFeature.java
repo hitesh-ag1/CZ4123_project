@@ -5,6 +5,7 @@ import org.apache.hadoop.io.Writable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class KmeanFeature implements Writable {
 
@@ -68,5 +69,10 @@ public class KmeanFeature implements Writable {
             this.array[i] = temp;
         }
         this.numPoints = 1;
+    }
+
+    @Override
+    public String toString() {
+        return  Arrays.toString(array);
     }
 }
