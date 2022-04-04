@@ -1,6 +1,8 @@
 package com.ntu.bdm.mapper;
 
 import com.ntu.bdm.util.KmeanFeature;
+
+import java.util.Arrays;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -9,16 +11,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 
-
 public class KmeanMapper extends Mapper<Object, Text, IntWritable, Text> {
     private KmeanFeature[] centroids;
+    private int numCluster;
     @Override
     public void setup(Context context) throws IOException, InterruptedException {
-        // TODO - The num is the number of cluster
-        this.centroids = new KmeanFeature[3];
-        for (int i = 0; i < 3; i++){
+        this.numCluster = context.getConfiguration().getInt("numCluster", 3);
+        this.centroids = new KmeanFeature[numCluster];
+        for (int i = 0; i < numCluster; i++){
             String[] s = context.getConfiguration().getStrings("centroid." + i);
-            this.centroids[i] = new KmeanFeature(s);
+            this.centroids[i] = new KmeanFeature(Arrays.toString(s));
         }
     }
 
