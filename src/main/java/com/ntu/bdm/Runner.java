@@ -30,6 +30,7 @@ public class Runner {
             case "select":
                 new SelectedFieldRunner(inpath, outpath);
                 break;
+
             case "init":
                 String[] arg = {inpath, outpath, "4"};
                 ToolRunner.run(new InputFileProcessor(), arg);
