@@ -19,7 +19,7 @@ public class MaxMapper extends Mapper<Object, Text, Text, FloatWritable> {
 
         String line = value.toString().split("\\t")[1];
         String[] stringArr = line.split(",");
-        String yearMonth = stringArr[1].substring(0, 7);
+        String yearMonth = stringArr[1];
         String location = stringArr[0];
         if (stringArr[2].equals("M")) stringArr[2] = "NaN";
         if (stringArr[3].equals("M")) stringArr[3] = "NaN";
