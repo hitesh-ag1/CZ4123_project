@@ -9,11 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class KmeanReducer extends Reducer<Text, Text, Text, KmeanFeature> {
+    private int numYears;
     private int numMonths;
     private int numField;
 
     public void setup(Reducer.Context context) throws IOException, InterruptedException {
-        this.numMonths = context.getConfiguration().getInt("numMonths", 60);
+        this.numYears = context.getConfiguration().getInt("numYears", 5);
+        this.numMonths = context.getConfiguration().getInt("numMonths", numYears *12);
         this.numField = context.getConfiguration().getInt("numField", 2);
     }
 
