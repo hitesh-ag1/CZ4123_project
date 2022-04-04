@@ -1,3 +1,7 @@
 /target/
 /${project.build.directory}/
 /.idea/
+src/main/java/experiment.java
+src/main/.DS_Store
+aws_key
+src/main/resources/example.csv
