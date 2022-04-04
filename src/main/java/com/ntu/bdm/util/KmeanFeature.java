@@ -18,7 +18,8 @@ public class KmeanFeature implements Writable {
         this.numPoints = 1;
     }
 
-    public KmeanFeature(String[] arr) {
+    public KmeanFeature(String string) {
+        String[] arr = string.split(",");
         this.array = new float[arr.length];
         for (int i = 0; i < arr.length; i++){
             this.array[i] = Float.parseFloat(arr[i]);
@@ -67,8 +68,8 @@ public class KmeanFeature implements Writable {
                 if (!Float.isNaN(points.get(i).array[j])){
                     ctr += 1;
                 }
-            this.array[j] = sum / (float) ctr;
-        }
+                this.array[j] = sum / (float) ctr;
+            }
         }
         this.numPoints = 1;
     }
