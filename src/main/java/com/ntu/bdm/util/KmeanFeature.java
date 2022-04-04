@@ -35,6 +35,11 @@ public class KmeanFeature implements Writable {
         this.array[idx] = val;
     }
 
+    public static KmeanFeature duplicate(KmeanFeature p){
+        KmeanFeature res = new KmeanFeature(Arrays.copyOf(p.array, p.array.length));
+        return res;
+    }
+
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         for (float f: array){
