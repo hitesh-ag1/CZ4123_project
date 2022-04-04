@@ -35,7 +35,7 @@ public class MeanReducer extends Reducer<Text, FloatWritable, Text, Text> {
 
         for (float f : list){
             float diff = f - mean;
-            sqrSum = diff * diff;
+            sqrSum += diff * diff;
         }
 
         float sd = (float) Math.sqrt(sqrSum / count);
