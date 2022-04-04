@@ -1,6 +1,7 @@
 package com.ntu.bdm;
 
 import com.ntu.bdm.runner.MaxRunner;
+import com.ntu.bdm.runner.MeanRunner;
 import com.ntu.bdm.util.InputFileProcessor;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.util.ToolRunner;
@@ -14,12 +15,18 @@ public class Runner {
 
     public static void main(String[] args) throws Exception {
         getCommandLineArguments(args);
-        if (className.equals("max")) {
-            new MaxRunner(inpath, outpath);
-        }
-        else if (className.equals("init")){
-            String[] arg = {inpath,outpath, "4"};
-            ToolRunner.run(new InputFileProcessor(), arg);
+        switch (className) {
+            case "max":
+                new MaxRunner(inpath, outpath);
+                break;
+            case "mean":
+                new MeanRunner(inpath, outpath);
+                break;
+            case "init":
+                String[] arg = {inpath, outpath, "4"};
+                ToolRunner.run(new InputFileProcessor(), arg);
+                break;
+
         }
     }
 
@@ -58,13 +65,24 @@ public class Runner {
             cmd = parser.parse(options, args);
             if (cmd.hasOption("c")) {
                 String opt_config = cmd.getOptionValue("class");
-                if (Objects.equals(opt_config.toUpperCase(), "MAX")) {
-                    System.out.println("Getting maximum for the file");
-                    className = "max";
-                } else if (Objects.equals(opt_config.toUpperCase(), "INIT")) {
-                    System.out.println("Generating key value pairs from raw data");
-                    className = "init";
-                } else System.out.println("Running as Unknown");
+                switch (opt_config.toUpperCase()) {
+                    case "MAX":
+                        System.out.println("Getting maximum for the file");
+                        className = "max";
+                        break;
+                    case "MEAN":
+                        System.out.println("Getting mean, median and SD for the file");
+                        className = "mean";
+                        break;
+                    case "INIT":
+                        System.out.println("Generating key value pairs from raw data");
+                        className = "init";
+                        break;
+                    default:
+                        System.out.println("Running as Unknown");
+                        break;
+                }
+
             }
             if (cmd.hasOption("i")) {
                 String opt_config = cmd.getOptionValue("inputpath");
