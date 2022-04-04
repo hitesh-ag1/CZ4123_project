@@ -44,7 +44,7 @@ public class SelectedFieldRunner {
         job.setReducerClass(SelectedFieldReducer.class);
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(KmeanFeature.class);
+        job.setOutputValueClass(Text.class);
 
         FileSystem filesystem = FileSystem.get(conf);
         filesystem.delete(new Path(outPath), true);

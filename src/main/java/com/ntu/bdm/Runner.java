@@ -2,6 +2,8 @@ package com.ntu.bdm;
 
 import com.ntu.bdm.runner.MaxRunner;
 import com.ntu.bdm.runner.MeanRunner;
+import com.ntu.bdm.runner.PointRunner;
+import com.ntu.bdm.runner.SelectedFieldRunner;
 import com.ntu.bdm.util.InputFileProcessor;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.util.ToolRunner;
@@ -22,6 +24,13 @@ public class Runner {
             case "mean":
                 new MeanRunner(inpath, outpath);
                 break;
+            case "point":
+                new PointRunner(inpath, outpath);
+                break;
+            case "select":
+                new SelectedFieldRunner(inpath, outpath);
+                break;
+
             case "init":
                 String[] arg = {inpath, outpath, "4"};
                 ToolRunner.run(new InputFileProcessor(), arg);
@@ -76,6 +85,14 @@ public class Runner {
                     case "INIT":
                         System.out.println("Generating key value pairs from raw data");
                         className = "init";
+                        break;
+                    case "POINT":
+                        System.out.println("Converting to points of feature");
+                        className = "point";
+                        break;
+                    case "SELECT":
+                        System.out.println("Filter and flatten the user input field");
+                        className = "select";
                         break;
                     default:
                         System.out.println("Running as Unknown");
