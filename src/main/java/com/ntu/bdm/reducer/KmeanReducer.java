@@ -23,7 +23,6 @@ public class KmeanReducer extends Reducer<Text, Text, Text, KmeanFeature> {
             String[] strArr = v.split(",");
             String s = Arrays.toString(strArr);
             points.add(new KmeanFeature(s.substring(2, s.length()-2)));
-
         }
 
         centroid.calculateCentroid(points);

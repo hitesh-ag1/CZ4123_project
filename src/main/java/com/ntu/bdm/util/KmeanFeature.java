@@ -57,10 +57,14 @@ public class KmeanFeature implements Writable {
 
     public float distance(KmeanFeature point){
         float dist = 0F;
+        int ctr = 0;
         for (int i = 0; i < this.array.length; i++){
-            dist += (this.array[i] - point.array[i]);
+            if (!Float.isNaN(point.array[i]) & !Float.isNaN(this.array[i])){
+                ctr += 1;
+            }
+            dist += Math.abs(this.array[i] - point.array[i]);
         }
-        return dist;
+        return dist / (float) ctr;
     }
 
 

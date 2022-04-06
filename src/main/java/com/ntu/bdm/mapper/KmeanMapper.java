@@ -47,6 +47,7 @@ public class KmeanMapper extends Mapper<Object, Text, Text, Text> {
 
         for (int i = 0; i < centroids.length; i++) {
             curDist = point.distance(centroids[i]);
+            System.out.printf("Centroid %d, distance = %f",i, curDist);
 
             if (curDist < min){
                 nearestCentroid = i;

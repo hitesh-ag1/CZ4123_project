@@ -4,6 +4,7 @@ import com.ntu.bdm.mapper.KmeanMapper;
 import com.ntu.bdm.reducer.KmeanReducer;
 import com.ntu.bdm.util.KmeanFeature;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -11,11 +12,9 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.checkerframework.checker.units.qual.K;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -35,10 +34,11 @@ import java.util.HashMap;
 
 public class KmeanRunner {
 
-    public KmeanRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
+    public KmeanRunner(String inPath, String outPath, int numIteration) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        conf.set("fs.default.name", "hdfs://3.1.36.136:9000");
-        conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
+        String ip = InetAddress.getLocalHost().toString().split("/")[1];
+        conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
+        conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
 
         boolean stop = false;
@@ -48,7 +48,6 @@ public class KmeanRunner {
         int numYear = 1;
         int numField = 2;
         int lengthOfFeatures = 12 * numField * numYear;
-        int numIteration = 2;
 
         conf.setInt("numCluster", numCluster);
         conf.setInt("numYear", numYear);
@@ -57,7 +56,7 @@ public class KmeanRunner {
 
         KmeanFeature[] newCentroid = generateCentroid(lengthOfFeatures, numCluster);
 
-        for (int i=0; i < numCluster; i++){
+        for (int i = 0; i < numCluster; i++) {
             conf.unset("centroid-" + i);
             conf.set("centroid-" + i, newCentroid[i].toString());
         }
@@ -87,7 +86,7 @@ public class KmeanRunner {
             }
 
             KmeanFeature[] tmp = new KmeanFeature[numCluster];
-            for (int i =0; i < numCluster; i++){
+            for (int i = 0; i < numCluster; i++) {
                 tmp[i] = KmeanFeature.duplicate(newCentroid[i]);
             }
             newCentroid = readCentroid(outPath, conf, numCluster, tmp);
@@ -96,25 +95,40 @@ public class KmeanRunner {
 
 
             // TODO - Threshold to stop based on distance
-            stop = ctr >= numIteration-1;
-            for (int i=0; i < numCluster; i++){
+            stop = ctr >= numIteration - 1;
+            for (int i = 0; i < numCluster; i++) {
                 conf.unset("centroid-" + i);
                 conf.set("centroid-" + i, newCentroid[i].toString());
             }
-
             ctr += 1;
-
         }
+        writeCentroid(conf, newCentroid, "/test/centroid");
+
+    }
+
+    private static void writeCentroid(Configuration conf, KmeanFeature[] centroids, String output) throws IOException {
+        FileSystem hdfs = FileSystem.get(conf);
+        FSDataOutputStream dos = hdfs.create(new Path(output + "/centroids.txt"), true);
+        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(dos));
+
+        //Write the result in a unique file
+        for (int i = 0; i < centroids.length; i++) {
+            br.write(i + "\t" + centroids[i].toString());
+            br.newLine();
+        }
+
+        br.close();
+        hdfs.close();
     }
 
     private KmeanFeature[] generateCentroid(int len, int numClus) {
         KmeanFeature[] centroids = new KmeanFeature[numClus];
-        for (int i = 0 ; i < numClus; i++ ) centroids[i] = new KmeanFeature(len);
+        for (int i = 0; i < numClus; i++) centroids[i] = new KmeanFeature(len);
         HashMap<Float, Boolean> position = new HashMap<>();
 
         int size = 0;
         while (size < len * numClus) {
-            Float randFloat = (float) Math.random() * 100;
+            Float randFloat = (float) Math.random();
             if (!position.containsKey(randFloat)) {
                 position.put(randFloat, true);
                 centroids[size / len].set(size % len, randFloat);
@@ -124,21 +138,21 @@ public class KmeanRunner {
         return centroids;
     }
 
-    private KmeanFeature[] readCentroid(String inPath, Configuration conf,int numCluster, KmeanFeature[] old) throws IOException {
+    private KmeanFeature[] readCentroid(String inPath, Configuration conf, int numCluster, KmeanFeature[] old) throws IOException {
         FileSystem hdfs = FileSystem.get(conf);
         FileStatus[] statuses = hdfs.listStatus(new Path(inPath));
 
-        for (int i = 0; i < statuses.length; i++){
-           if(!statuses[i].getPath().toString().endsWith("_SUCCESS")){
-               BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(statuses[i].getPath())));
-               while (br.readLine() != null) {
-                   String[] line = br.readLine().split("\\t");
-                   int centroidId = Integer.parseInt(line[0]);
-                   String centroid = line[1];
-                   old[centroidId] = new KmeanFeature(centroid.substring(1, centroid.length() - 1));
-               }
-               br.close();
-           }
+        for (int i = 0; i < statuses.length; i++) {
+            if (!statuses[i].getPath().toString().endsWith("_SUCCESS")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(statuses[i].getPath())));
+                while (br.ready()) {
+                    String[] line = br.readLine().split("\\t");
+                    int centroidId = Integer.parseInt(line[0]);
+                    String centroid = line[1];
+                    old[centroidId] = new KmeanFeature(centroid.substring(1, centroid.length() - 1));
+                }
+                br.close();
+            }
         }
 
         return old;
