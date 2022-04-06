@@ -11,6 +11,7 @@ public class Runner {
     private static String className = "";
     private static String inpath = "";
     private static String outpath = "";
+    private static int numIte = 3;
 
     public static void main(String[] args) throws Exception {
         getCommandLineArguments(args);
@@ -28,7 +29,7 @@ public class Runner {
                 new SelectedFieldRunner(inpath, outpath);
                 break;
             case "kmean":
-                new KmeanRunner(inpath, outpath);
+                new KmeanRunner(inpath, outpath, numIte);
                 break;
             case "output":
                 new OutputRunner(inpath, outpath);
@@ -67,6 +68,13 @@ public class Runner {
                 .withLongOpt("outputpath")
                 .withDescription("The output path to read the data")
                 .create("o");
+        options.addOption(config);
+
+        config = OptionBuilder
+                .hasArg()
+                .withLongOpt("numIteration")
+                .withDescription("The output path to read the data")
+                .create("ite");
         options.addOption(config);
 
         // define parse
@@ -122,7 +130,13 @@ public class Runner {
                 String opt_config = cmd.getOptionValue("outputpath");
                 System.out.println("Output path: " + opt_config);
                 outpath = opt_config;
-            } else throw new Error("Input path arguments not found");
+            } else throw new Error("Output path arguments not found");
+
+            if (cmd.hasOption("ite")) {
+                String opt_config = cmd.getOptionValue("numIteration");
+                System.out.println("Number of Kmean iteration: " + opt_config);
+                numIte = Integer.parseInt(opt_config);
+            }
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             helper.printHelp("Usage:", options);
