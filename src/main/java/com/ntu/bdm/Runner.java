@@ -56,7 +56,6 @@ public class Runner {
 
         config = OptionBuilder
                 .hasArg()
-                .isRequired()
                 .withLongOpt("inputpath")
                 .withDescription("The input path to read the data")
                 .create("i");
@@ -64,7 +63,6 @@ public class Runner {
 
         config = OptionBuilder
                 .hasArg()
-                .isRequired()
                 .withLongOpt("outputpath")
                 .withDescription("The output path to read the data")
                 .create("o");

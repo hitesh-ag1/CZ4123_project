@@ -35,6 +35,8 @@ import java.net.InetAddress;
 public class SelectedFieldRunner {
     public SelectedFieldRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
+        if (inPath.isEmpty()) inPath = "/CZ4123/points";
+        if (outPath.isEmpty()) outPath = "/CZ4123/selected";
         String ip = InetAddress.getLocalHost().toString().split("/")[1];
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
         conf.set("yarn.resourcemanager.hostname", ip); // see step 3

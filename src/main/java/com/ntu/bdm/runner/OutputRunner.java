@@ -24,13 +24,15 @@ import java.util.Arrays;
 public class OutputRunner {
     public OutputRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
+        if (inPath.isEmpty()) inPath = "/CZ4123/selected";
+        if (outPath.isEmpty()) outPath = "/CZ4123/output";
         String ip = InetAddress.getLocalHost().toString().split("/")[1];
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
         conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
         int numCluster = conf.getInt("numCluster", 3);
 
-        KmeanFeature[] newCentroid = readCentroid("/test/centroid/centroids.txt", conf, numCluster);
+        KmeanFeature[] newCentroid = readCentroid("/CZ4123/centroid/centroids.txt", conf, numCluster);
         for (int i = 0; i < numCluster; i++) {
             conf.unset("centroid-" + i);
             conf.set("centroid-" + i, newCentroid[i].toString());
