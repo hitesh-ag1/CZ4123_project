@@ -36,8 +36,6 @@ public class KmeanRunner {
 
     public KmeanRunner(String inPath, String outPath, int numIteration) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        if (inPath.isEmpty()) inPath = "/CZ4123/selected";
-        if (outPath.isEmpty()) outPath = "/CZ4123/kmean";
         String ip = InetAddress.getLocalHost().toString().split("/")[1];
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
         conf.set("yarn.resourcemanager.hostname", ip); // see step 3
@@ -104,7 +102,7 @@ public class KmeanRunner {
             }
             ctr += 1;
         }
-        writeCentroid(conf, newCentroid, "/CZ4123/centroid");
+        writeCentroid(conf, newCentroid, "/test/centroid");
 
     }
 
