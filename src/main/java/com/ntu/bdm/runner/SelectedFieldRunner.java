@@ -1,10 +1,7 @@
 package com.ntu.bdm.runner;
 
-import com.ntu.bdm.mapper.PointMapper;
 import com.ntu.bdm.mapper.SelectedFieldMapper;
-import com.ntu.bdm.reducer.PointReducer;
 import com.ntu.bdm.reducer.SelectedFieldReducer;
-import com.ntu.bdm.util.KmeanFeature;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -15,6 +12,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 
 /*
@@ -30,17 +28,17 @@ import java.net.InetAddress;
  * Length of value = #year * 12 * #Field
  * All the v of the same location will be flattened into 1D array
  * following the index in map stage
-*/
+ */
 
 public class SelectedFieldRunner {
-    public SelectedFieldRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
+    public SelectedFieldRunner(String inPath, String outPath, ArrayList<String> criterion) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        if (inPath.isEmpty()) inPath = "/CZ4123/points";
-        if (outPath.isEmpty()) outPath = "/CZ4123/selected";
         String ip = InetAddress.getLocalHost().toString().split("/")[1];
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
         conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
+        String s = String.valueOf(criterion);
+        conf.set("criterion", s.substring(0, s.length() - 1));
         Job job = Job.getInstance(conf, "FlattenFields");
 
         job.setJarByClass(SelectedFieldRunner.class);

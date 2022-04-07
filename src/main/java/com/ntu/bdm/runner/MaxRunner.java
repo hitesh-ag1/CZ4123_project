@@ -17,8 +17,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class MaxRunner {
     public MaxRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        if (inPath.isEmpty()) inPath = "/CZ4123/intermediate";
-        if (outPath.isEmpty()) outPath = "/CZ4123/stats/max";
         String ip = InetAddress.getLocalHost().toString().split("/")[1];
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
         conf.set("yarn.resourcemanager.hostname", ip); // see step 3
