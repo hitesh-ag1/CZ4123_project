@@ -37,8 +37,11 @@ public class SelectedFieldRunner {
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
         conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
+
         String s = String.valueOf(criterion);
-        conf.set("criterion", s.substring(0, s.length() - 1));
+        conf.set("criterion", s.substring(1, s.length() - 1));
+        conf.setInt("numCriterion", criterion.size());
+
         Job job = Job.getInstance(conf, "FlattenFields");
 
         job.setJarByClass(SelectedFieldRunner.class);

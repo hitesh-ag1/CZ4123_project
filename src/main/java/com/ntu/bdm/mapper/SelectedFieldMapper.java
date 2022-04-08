@@ -27,7 +27,7 @@ public class SelectedFieldMapper extends Mapper<Object, Text, Text, Text> {
         HashMap<String, Integer> selected = new HashMap<>();
 
         for (int i = 0; i < criterion.length; i++) {
-            selected.put(criterion[i], i);
+            selected.put(criterion[i].trim(), i);
         }
 
         String cur = String.format("%s_%s", field, stat);
