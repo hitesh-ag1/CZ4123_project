@@ -80,7 +80,7 @@ public class TasksUserInterface {
         int choice = 1;
         while (choice == 1){
             res.add(askField() + "_" + askStats());
-            choice = SafeScanner.readInt("Put 1 to add more, else stop = ");
+            choice = SafeScanner.readInt("Put 1 to add more, 0 to stop = ");
         }
         return res;
     }
