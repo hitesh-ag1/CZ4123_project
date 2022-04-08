@@ -18,9 +18,9 @@ public class TasksUserInterface {
 
     private void printHeader(String message) {
         System.out.println();
-        System.out.println("=".repeat(message.length()));
+        System.out.println(new String(new char[message.length()]).replace("\0", "="));
         System.out.println(message);
-        System.out.println("=".repeat(message.length()));
+        System.out.println(new String(new char[message.length()]).replace("\0", "="));
     }
 
     private void printTask(String task, String inPath, String outPath) {
@@ -30,7 +30,7 @@ public class TasksUserInterface {
         System.out.println("Output path: " + outPath);
         System.out.println();
         System.out.println("Map reduce log");
-        System.out.println("-".repeat(30));
+        System.out.println(new String(new char[30]).replace("\0", "-"));
     }
 
     private String askPath(String description) {

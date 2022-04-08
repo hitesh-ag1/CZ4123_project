@@ -25,7 +25,7 @@ public enum Manual {
     }
 
     public static void printManual() {
-        final String divider = "=".repeat(64);
+        final String divider = new String(new char[64]).replace("\0", "=");
         Manual[] manuals = Manual.values();
 
         System.out.println();
