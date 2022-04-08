@@ -9,6 +9,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -16,8 +17,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class MaxRunner {
     public MaxRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        conf.set("fs.default.name","hdfs://3.1.36.136:9000");
-        conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
+        conf.set("fs.default.name","hdfs://54.169.249.35:9000");
+        conf.set("yarn.resourcemanager.hostname", "54.169.249.35"); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
         Job job = Job.getInstance(conf, "Min Max Temp");
 
@@ -25,7 +26,7 @@ public class MaxRunner {
         job.setMapperClass(MaxMapper.class);
         job.setReducerClass(MaxReducer.class);
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(FloatWritable.class);
+        job.setOutputValueClass(Text.class);
 
         FileSystem filesystem = FileSystem.get(conf);
         filesystem.delete(new Path(outPath), true);

@@ -31,8 +31,8 @@ import java.io.IOException;
 public class PointRunner {
     public PointRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        conf.set("fs.default.name","hdfs://3.1.36.136:9000");
-        conf.set("yarn.resourcemanager.hostname", "3.1.36.136"); // see step 3
+        conf.set("fs.default.name","hdfs://54.169.249.35:9000");
+        conf.set("yarn.resourcemanager.hostname", "54.169.249.35"); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
         Job job = Job.getInstance(conf, "ConvertToPoint");
 
