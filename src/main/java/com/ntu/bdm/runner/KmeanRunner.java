@@ -64,6 +64,7 @@ public class KmeanRunner {
 
         int ctr = 0;
         while (!stop) {
+            outPath += "_" + ctr;
             Job job = Job.getInstance(conf, "Kmean_" + ctr);
 
             job.setJarByClass(KmeanRunner.class);

@@ -17,9 +17,13 @@ public class MeanReducer extends Reducer<Text, FloatWritable, Text, Text> {
         List<Float> list = new ArrayList<>();
         for (FloatWritable value : values) {
             float curVal = value.get();
-            sum += curVal;
-            count += 1;
-            list.add(curVal);
+            // TODO - Need to exclude NaN in calculation 100+NaN = NaN
+            if (!Float.isNaN(curVal)){
+                sum += curVal;
+                count += 1;
+                list.add(curVal);
+            }
+
         }
 
         Collections.sort(list);
