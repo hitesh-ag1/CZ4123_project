@@ -5,8 +5,6 @@ import com.ntu.bdm.util.InputFileProcessor;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.util.ToolRunner;
 
-import java.util.Objects;
-
 public class Runner {
     private static String className = "";
     private static String inpath = "";
@@ -26,13 +24,13 @@ public class Runner {
                 new PointRunner(inpath, outpath);
                 break;
             case "select":
-                new SelectedFieldRunner(inpath, outpath);
+                new SelectedFieldRunner(inpath, outpath, null);
                 break;
             case "kmean":
-                new KmeanRunner(inpath, outpath, numIte);
+                new KmeanRunner(inpath, outpath, 3, 3);
                 break;
             case "output":
-                new OutputRunner(inpath, outpath);
+                new OutputRunner(inpath, outpath, 3);
                 break;
 
             case "init":

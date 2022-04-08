@@ -22,15 +22,15 @@ import java.net.InetAddress;
 import java.util.Arrays;
 
 public class OutputRunner {
-    public OutputRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
+    public OutputRunner(String inPath, String outPath, int numCluster) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
         String ip = InetAddress.getLocalHost().toString().split("/")[1];
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
         conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
-        int numCluster = conf.getInt("numCluster", 3);
 
-        KmeanFeature[] newCentroid = readCentroid("/test/centroid/centroids.txt", conf, numCluster);
+        KmeanFeature[] newCentroid = readCentroid("/tmp/centroids.txt", conf, numCluster);
+        conf.setInt("numCluster", numCluster);
         for (int i = 0; i < numCluster; i++) {
             conf.unset("centroid-" + i);
             conf.set("centroid-" + i, newCentroid[i].toString());
@@ -49,7 +49,7 @@ public class OutputRunner {
 
         FileInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        job.waitForCompletion(true);
     }
 
     private KmeanFeature[] readCentroid(String inPath, Configuration conf, int numCluster) throws IOException {
@@ -71,5 +71,21 @@ public class OutputRunner {
         }
 
         return centroids;
+    }
+
+    private int getLengthOfFeature(String inPath, Configuration conf) throws IOException {
+        FileSystem hdfs = FileSystem.get(conf);
+        FileStatus[] statuses = hdfs.listStatus(new Path(inPath));
+        int len = 0;
+        for (int i = 0; i < statuses.length; i++) {
+            if (!statuses[i].getPath().toString().endsWith("_SUCCESS")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(statuses[i].getPath())));
+                String[] line = br.readLine().split("\\t");
+                String point = line[1];
+                len = point.substring(1, point.length() - 1).split(",").length;
+                br.close();
+            }
+        }
+        return len;
     }
 }

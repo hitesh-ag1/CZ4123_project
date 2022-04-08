@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class KmeanReducer extends Reducer<Text, Text, Text, KmeanFeature> {
-
+    int lengthOfFeature = 12;
+    @Override
+    protected void setup(Reducer<Text, Text, Text, KmeanFeature>.Context context) throws IOException, InterruptedException {
+        this.lengthOfFeature = context.getConfiguration().getInt("lengthOfFeature", 12);
+    }
 
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-        int lengthOfFeature = context.getConfiguration().getInt("lengthOfFeature", 24);
         KmeanFeature centroid = new KmeanFeature(lengthOfFeature);
         ArrayList<KmeanFeature> points = new ArrayList<>();
         System.out.printf("Key: %s \n",key);
