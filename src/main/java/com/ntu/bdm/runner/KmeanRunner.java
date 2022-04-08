@@ -74,7 +74,6 @@ public class KmeanRunner {
 
             if (!status) {
                 System.err.println("Iteration " + ctr + " failed");
-                System.exit(1);
             }
 
             KmeanFeature[] tmp = new KmeanFeature[numCluster];

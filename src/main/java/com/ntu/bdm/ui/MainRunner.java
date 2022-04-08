@@ -36,7 +36,6 @@ public class MainRunner {
                         ui.runKmeanUI();
                         break;
                     case STOP:
-                        //TODO UI does not return to this page after MapReduce task
                         shouldStop = true;
                         break;
                     default:

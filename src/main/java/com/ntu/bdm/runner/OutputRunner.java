@@ -49,7 +49,7 @@ public class OutputRunner {
 
         FileInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        job.waitForCompletion(true);
     }
 
     private KmeanFeature[] readCentroid(String inPath, Configuration conf, int numCluster) throws IOException {
