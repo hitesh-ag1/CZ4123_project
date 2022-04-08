@@ -22,7 +22,7 @@ public class SelectedFieldReducer extends Reducer<Text, Text, Text, Text> {
             break;
         }
 
-        KmeanFeature point = new KmeanFeature(numCriterion);
+        KmeanFeature point = new KmeanFeature(numCriterion * totalMonth);
         for (Text value : values) {
             String[] v = value.toString().split("_");
             int idx = Integer.parseInt(v[0]);
