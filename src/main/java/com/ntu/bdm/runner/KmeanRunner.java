@@ -43,10 +43,10 @@ public class KmeanRunner {
 
         boolean stop = false;
 
-        int lengthOfFeatures = this.getLengthOfFeature(inPath, conf);
+        int lengthOfFeature = this.getLengthOfFeature(inPath, conf);
         conf.setInt("numCluster", numCluster);
-        conf.setInt("LengthOfFeatures", lengthOfFeatures);
-        KmeanFeature[] newCentroid = generateCentroid(lengthOfFeatures, numCluster);
+        conf.setInt("lengthOfFeature", lengthOfFeature);
+        KmeanFeature[] newCentroid = generateCentroid(lengthOfFeature, numCluster);
 
         for (int i = 0; i < numCluster; i++) {
             conf.unset("centroid-" + i);
