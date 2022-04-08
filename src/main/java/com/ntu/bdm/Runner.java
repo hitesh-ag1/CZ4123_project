@@ -27,10 +27,10 @@ public class Runner {
                 new SelectedFieldRunner(inpath, outpath, null);
                 break;
             case "kmean":
-                new KmeanRunner(inpath, outpath, numIte);
+                new KmeanRunner(inpath, outpath, 3, 3);
                 break;
             case "output":
-                new OutputRunner(inpath, outpath);
+                new OutputRunner(inpath, outpath, 3);
                 break;
 
             case "init":

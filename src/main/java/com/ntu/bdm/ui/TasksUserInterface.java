@@ -43,6 +43,11 @@ public class TasksUserInterface {
         return SafeScanner.readInt("Enter number of iteration = ");
     }
 
+    private int askNumCluster() {
+        System.out.println("Put -1 if you want to use default value = 3");
+        return SafeScanner.readInt("Enter number of cluster = ");
+    }
+
     private String askField() {
         printHeader("Choose the field");
         Field[] fields = Field.values();
@@ -174,6 +179,7 @@ public class TasksUserInterface {
         String inPath = this.askPath("Input");
         String outPath = this.askPath("Output");
         int numIte = this.askIte();
+        int numCluster = this.askNumCluster();
 
         if (inPath.isEmpty()) {
             inPath = "CZ4123/selected";
@@ -184,9 +190,16 @@ public class TasksUserInterface {
         if (numIte == -1) {
             numIte = 3;
         }
+        if (numCluster == -1) {
+            numCluster = 3;
+        }
 
         printTask(header, inPath, outPath);
-        new KmeanRunner(inPath, outPath, numIte);
+        new KmeanRunner(inPath, outPath, numCluster, numIte);
+
+        header = "Linking station to the calculated centroids\n (Check /tmp/centroid.txt for final centroid values)";
+        this.printHeader(header);
+        new OutputRunner(inPath, outPath, numCluster);
     }
 
     enum Field {
