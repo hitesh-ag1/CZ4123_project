@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class KmeanFeature implements Writable {
-
-    // TODO - Initialise to array of size = numMonths
     private float[] array;
     private int numPoints;
 
