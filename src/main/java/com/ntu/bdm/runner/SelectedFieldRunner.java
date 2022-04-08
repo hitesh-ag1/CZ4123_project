@@ -3,6 +3,7 @@ package com.ntu.bdm.runner;
 import com.ntu.bdm.mapper.SelectedFieldMapper;
 import com.ntu.bdm.reducer.SelectedFieldReducer;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
@@ -10,7 +11,9 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
@@ -42,6 +45,9 @@ public class SelectedFieldRunner {
         conf.set("criterion", s.substring(1, s.length() - 1));
         conf.setInt("numCriterion", criterion.size());
 
+        int numMonthPerCriteria = getMonth(inPath, conf);
+        conf.setInt("numMonthPerCriteria", numMonthPerCriteria);
+
         Job job = Job.getInstance(conf, "FlattenFields");
 
         job.setJarByClass(SelectedFieldRunner.class);
@@ -58,5 +64,21 @@ public class SelectedFieldRunner {
 //      KeyValueTextInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
         job.waitForCompletion(true);
+    }
+
+    private int getMonth(String inPath, Configuration conf) throws IOException {
+        FileSystem hdfs = FileSystem.get(conf);
+        FileStatus[] statuses = hdfs.listStatus(new Path(inPath));
+        int len = 0;
+        for (int i = 0; i < statuses.length; i++) {
+            if (!statuses[i].getPath().toString().endsWith("_SUCCESS")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(statuses[i].getPath())));
+                String[] line = br.readLine().split("\\t");
+                String point = line[1];
+                len = point.substring(1, point.length() - 1).split(",").length;
+                br.close();
+            }
+        }
+        return len;
     }
 }
