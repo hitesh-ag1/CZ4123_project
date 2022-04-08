@@ -34,7 +34,7 @@ import java.util.HashMap;
 
 public class KmeanRunner {
 
-    public KmeanRunner(String inPath, String outPath, int numCluster, int numIteration) throws IOException, ClassNotFoundException, InterruptedException {
+    public KmeanRunner(String inPath, String outPath, int numCluster, int numIteration, boolean randomCentroidInit) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
         String ip = InetAddress.getLocalHost().toString().split("/")[1];
         conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
@@ -46,7 +46,10 @@ public class KmeanRunner {
         int lengthOfFeature = this.getLengthOfFeature(inPath, conf);
         conf.setInt("numCluster", numCluster);
         conf.setInt("lengthOfFeature", lengthOfFeature);
-        KmeanFeature[] newCentroid = generateCentroid(lengthOfFeature, numCluster);
+        KmeanFeature[] newCentroid;
+        if (randomCentroidInit)
+            newCentroid = generateCentroid(lengthOfFeature, numCluster);
+        else newCentroid = readPointAsCentroid(inPath, conf, numCluster);
 
         for (int i = 0; i < numCluster; i++) {
             conf.unset("centroid-" + i);
@@ -70,7 +73,7 @@ public class KmeanRunner {
             filesystem.delete(new Path(outPath), true);
 
             FileInputFormat.addInputPath(job, new Path(inPath));
-            FileOutputFormat.setOutputPath(job, new Path(outPath + "_" + ctr));
+            FileOutputFormat.setOutputPath(job, new Path(outPath));
             boolean status = job.waitForCompletion(true);
 
             if (!status) {
@@ -81,7 +84,7 @@ public class KmeanRunner {
             for (int i = 0; i < numCluster; i++) {
                 tmp[i] = KmeanFeature.duplicate(newCentroid[i]);
             }
-            newCentroid = readCentroid(outPath + "_" + ctr, conf, numCluster, tmp);
+            newCentroid = readCentroid(outPath, conf, numCluster, tmp);
             System.out.println(ctr);
             System.out.println(Arrays.toString(newCentroid));
 
@@ -147,6 +150,33 @@ public class KmeanRunner {
             }
         }
         return old;
+    }
+
+    private KmeanFeature[] readPointAsCentroid(String inPath, Configuration conf, int numCluster) throws IOException {
+        FileSystem hdfs = FileSystem.get(conf);
+        FileStatus[] statuses = hdfs.listStatus(new Path(inPath));
+        KmeanFeature[] centroids = new KmeanFeature[numCluster];
+        int len = conf.getInt("lengthOfFeature", 12);
+        for (int i = 0; i < numCluster; i++){
+            centroids[i] = new KmeanFeature(len);
+        }
+
+
+        for (int i = 0; i < statuses.length; i++) {
+            if (!statuses[i].getPath().toString().endsWith("_SUCCESS")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(statuses[i].getPath())));
+                int centroidId = 0;
+                while (br.ready()) {
+                    String[] line = br.readLine().split("\\t");
+                    String centroid = line[1];
+                    centroids[centroidId] = new KmeanFeature(centroid.substring(1, centroid.length() - 1));
+                    centroidId += 1;
+                    if (centroidId >= numCluster){break;}
+                }
+                br.close();
+            }
+        }
+        return centroids;
     }
 
     private int getLengthOfFeature(String inPath, Configuration conf) throws IOException {

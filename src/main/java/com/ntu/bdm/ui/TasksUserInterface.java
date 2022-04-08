@@ -43,6 +43,11 @@ public class TasksUserInterface {
         return SafeScanner.readInt("Enter number of iteration = ");
     }
 
+    private int askRandomCentroid() {
+        System.out.println("Put 1 if you want to use random centroid, 0 to use first K points as centroids");
+        return SafeScanner.readInt("Random generate centroid = ");
+    }
+
     private int askNumCluster() {
         System.out.println("Put -1 if you want to use default value = 3");
         return SafeScanner.readInt("Enter number of cluster = ");
@@ -180,6 +185,7 @@ public class TasksUserInterface {
         String outPath = this.askPath("Output");
         int numIte = this.askIte();
         int numCluster = this.askNumCluster();
+        int randomCentroidInit = this.askRandomCentroid();
 
         if (inPath.isEmpty()) {
             inPath = "CZ4123/selected";
@@ -195,7 +201,7 @@ public class TasksUserInterface {
         }
 
         printTask(header, inPath, outPath);
-        new KmeanRunner(inPath, outPath, numCluster, numIte);
+        new KmeanRunner(inPath, outPath, numCluster, numIte, randomCentroidInit > 0);
 
         header = "Linking station to the calculated centroids\n (Check /tmp/centroid.txt for final centroid values)";
         this.printHeader(header);
