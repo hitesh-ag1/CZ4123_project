@@ -1,6 +1,7 @@
 package com.ntu.bdm;
 
 import com.ntu.bdm.runner.MaxRunner;
+import com.ntu.bdm.runner.NormRunner;
 import com.ntu.bdm.runner.MeanRunner;
 import com.ntu.bdm.runner.PointRunner;
 import com.ntu.bdm.runner.SelectedFieldRunner;
@@ -14,6 +15,7 @@ public class Runner {
     private static String className = "";
     private static String inpath = "";
     private static String outpath = "";
+    private static String inpath2 = "";
 
     public static void main(String[] args) throws Exception {
         getCommandLineArguments(args);
@@ -30,11 +32,16 @@ public class Runner {
             case "select":
                 new SelectedFieldRunner(inpath, outpath);
                 break;
+            case "norm":
+                new NormRunner(inpath, outpath, inpath2);
+                break;
 
             case "init":
                 String[] arg = {inpath, outpath, "4"};
                 ToolRunner.run(new InputFileProcessor(), arg);
                 break;
+
+
         }
     }
 
@@ -64,6 +71,14 @@ public class Runner {
                 .create("o");
         options.addOption(config);
 
+        config = OptionBuilder
+                .hasArg()
+                .withLongOpt("inputpath2")
+                .withDescription("The input path to read the data")
+                .create("i2");
+        options.addOption(config);
+
+
         // define parse
         CommandLine cmd;
         CommandLineParser parser = new BasicParser();
@@ -82,6 +97,12 @@ public class Runner {
                         System.out.println("Getting mean, median and SD for the file");
                         className = "mean";
                         break;
+
+                    case "NORM":
+                        System.out.println("Normalizing data file");
+                        className = "norm";
+                        break;
+
                     case "INIT":
                         System.out.println("Generating key value pairs from raw data");
                         className = "init";
@@ -110,6 +131,13 @@ public class Runner {
                 System.out.println("Output path: " + opt_config);
                 outpath = opt_config;
             } else throw new Error("Input path arguments not found");
+
+            if (cmd.hasOption("i2")) {
+                String opt_config = cmd.getOptionValue("inputpath2");
+                System.out.println("Input path 2: " + opt_config);
+                inpath2 = opt_config;
+            }
+
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             helper.printHelp("Usage:", options);
