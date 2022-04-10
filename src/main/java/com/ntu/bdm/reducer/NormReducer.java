@@ -18,17 +18,19 @@ public class NormReducer extends Reducer<Text, Text, Text, Text> {
     @Override
     protected void setup(Reducer<Text, Text, Text, Text>.Context context) throws IOException, InterruptedException {
         Configuration conf = context.getConfiguration();
-        this.mindate = Integer.parseInt(conf.get("date"));
-        this.humMax = Float.parseFloat(conf.get("HUMMax"));
-        this.humMin = Float.parseFloat(conf.get("HUMMin"));
-        this.tempMax = Float.parseFloat(conf.get("TMPMax"));
-        this.tempMin = Float.parseFloat(conf.get("TMPMin"));
+        this.mindate = conf.getInt("date", 200001);
+        this.humMax = conf.getFloat("HUMMax", 0);;
+        this.humMin = conf.getFloat("HUMMin", 0);
+        this.tempMax = conf.getFloat("TMPMax", 0);
+        this.tempMin = conf.getFloat("TMPMin", 0);
+        System.out.println("TestMinDate Reducer "+ mindate);
+        System.out.println("HUMMax Reducer "+ humMax);
     }
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         String strKey = key.toString();
         String[] listKey = strKey.split(",");
         String station = listKey[0];
-        int yearMonth = Integer.parseInt(listKey[1].substring(0, 7));
+        int yearMonth = Integer.parseInt(listKey[1].toString().substring(0, 4) + listKey[1].toString().substring(5, 7));
         String currInd = transformIndex(yearMonth, mindate);
         float floatTemp = 0;
         float floatHum = 0;
@@ -46,8 +48,8 @@ public class NormReducer extends Reducer<Text, Text, Text, Text> {
 //                FloatWritable value2 = new FloatWritable(floatVal);
         }
         String output = String.format("%s,%s",floatTemp,floatHum);
-        String newKey = station+","+currInd;
-        context.write(new Text(newKey), new Text(output));
+        String newValue = station+","+currInd+",";
+        context.write(new Text("Normalized:"), new Text(newValue+output));
 
 //            System.out.printf("Key: %s\n", key);
 //            System.out.printf("Max: %s\n",mx);

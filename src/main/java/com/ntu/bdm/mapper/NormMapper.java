@@ -12,7 +12,14 @@ public class NormMapper extends Mapper<Object, Text, Text, Text> {
     private final static IntWritable one = new IntWritable(1);
     private Text wordTmp = new Text();
     private Text wordHum =  new Text();
+    int mindate;
 
+    @Override
+    public void setup(Context context) throws IOException, InterruptedException {
+        Configuration conf = context.getConfiguration();
+        this.mindate = conf.getInt("date", 200001);
+        System.out.println("TestMinDate Mapper "+ mindate);
+    }
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
         System.out.printf("Key: %s \n",key);
         System.out.printf("Value: %s \n",value);

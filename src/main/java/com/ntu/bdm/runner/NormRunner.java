@@ -23,6 +23,7 @@ public class NormRunner {
         conf.set("fs.default.name", "hdfs://54.169.249.35:9000");
         conf.set("yarn.resourcemanager.hostname", "54.169.249.35"); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
+        conf = getMinMax(inPath2, conf);
         Job job = Job.getInstance(conf, "Normalization");
 
         job.setJarByClass(NormRunner.class);
@@ -38,13 +39,14 @@ public class NormRunner {
 //      KeyValueTextInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
 
-        conf = getMinMax(inPath2, conf);
-        int mindate = Integer.parseInt(conf.get("date"));
-        float humMax = Float.parseFloat(conf.get("HUMMax"));
-        float humMin = Float.parseFloat(conf.get("HUMMin"));
-        float tempMax = Float.parseFloat(conf.get("TMPMax"));
-        float tempMin = Float.parseFloat(conf.get("TMPMin"));
-        System.out.println("TestMinDate"+ mindate);
+
+//        int mindate = conf.getInt("date", 200001);
+//        float humMax = conf.getFloat("HUMMax", 0);
+//        float humMin = conf.getFloat("HUMMin", 0);
+//        float tempMax = conf.getFloat("TMPMax", 0);
+//        float tempMin = conf.getFloat("TMPMin", 0);
+//        System.out.println("TestMinDate "+ mindate);
+//        System.out.println("HUMMax "+ humMax);
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 
