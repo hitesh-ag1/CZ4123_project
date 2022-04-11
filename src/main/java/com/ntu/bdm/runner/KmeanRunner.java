@@ -81,16 +81,16 @@ public class KmeanRunner {
             }
 
             KmeanFeature[] tmp = new KmeanFeature[numCluster];
+            KmeanFeature[] old = new KmeanFeature[numCluster];
             for (int i = 0; i < numCluster; i++) {
                 tmp[i] = KmeanFeature.duplicate(newCentroid[i]);
+                old[i] = KmeanFeature.duplicate(newCentroid[i]);
             }
             newCentroid = readCentroid(outPath, conf, numCluster, tmp);
+            stop = ctr >= numIteration - 1 || hasConverged(old, newCentroid);
             System.out.println(ctr);
             System.out.println(Arrays.toString(newCentroid));
 
-
-            // TODO - Threshold to stop based on distance
-            stop = ctr >= numIteration - 1;
             for (int i = 0; i < numCluster; i++) {
                 conf.unset("centroid-" + i);
                 conf.set("centroid-" + i, newCentroid[i].toString());
@@ -114,6 +114,15 @@ public class KmeanRunner {
 
         br.close();
         hdfs.close();
+    }
+
+    private boolean hasConverged(KmeanFeature[] oldC, KmeanFeature[] newC) {
+        for (int i = 0; i < oldC.length; i++) {
+            float diff = oldC[i].distance(newC[i]);
+            System.out.println(diff);
+            if (Math.abs(diff) > 0.005) return false;
+        }
+        return true;
     }
 
     private KmeanFeature[] generateCentroid(int len, int numClus) {
