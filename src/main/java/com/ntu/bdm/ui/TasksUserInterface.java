@@ -34,7 +34,7 @@ public class TasksUserInterface {
     }
 
     private String askPath(String description) {
-        System.out.println("Press ENTER if you want to use default path /CZ4123");
+        System.out.println("Press ENTER if you want to use default path CZ4123");
         return SafeScanner.readLine(String.format("Enter %s Path = ", description));
     }
 
@@ -107,8 +107,8 @@ public class TasksUserInterface {
         ToolRunner.run(new InputFileProcessor(), arg);
     }
 
-    void runMinMaxUI() throws Exception {
-        String header = "Finding the minimum and maximum";
+    void runNormaliseUI() throws Exception {
+        String header = "Normalising data and indexing date";
         this.printHeader(header);
         String inPath = this.askPath("Input");
         String outPath = this.askPath("Output");
@@ -117,26 +117,28 @@ public class TasksUserInterface {
             inPath = "CZ4123/intermediate";
         }
         if (outPath.isEmpty()) {
-            outPath = "CZ4123/stats/minMax";
+            outPath = "CZ4123/normalised";
         }
         printTask(header, inPath, outPath);
-        new MaxRunner(inPath, outPath);
+        String[] arg = {inPath, outPath, "4"};
+        ToolRunner.run(new InputFileProcessor(), arg);
     }
 
-    void runMeanMedSDUI() throws Exception {
-        String header = "Finding the mean, median and standard deviation";
+
+    void runStatsUI() throws Exception {
+        String header = "Finding the statistical values";
         this.printHeader(header);
         String inPath = this.askPath("Input");
         String outPath = this.askPath("Output");
 
         if (inPath.isEmpty()) {
-            inPath = "CZ4123/intermediate";
+            inPath = "CZ4123/normalise";
         }
         if (outPath.isEmpty()) {
-            outPath = "CZ4123/stats/meanMedSD";
+            outPath = "CZ4123/stats/";
         }
         printTask(header, inPath, outPath);
-        new MeanRunner(inPath, outPath);
+        new StatsRunner(inPath, outPath);
     }
 
     void runPointUI() throws Exception {

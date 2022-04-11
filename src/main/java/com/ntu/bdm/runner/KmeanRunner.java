@@ -157,7 +157,7 @@ public class KmeanRunner {
         FileStatus[] statuses = hdfs.listStatus(new Path(inPath));
         KmeanFeature[] centroids = new KmeanFeature[numCluster];
         int len = conf.getInt("lengthOfFeature", 12);
-        for (int i = 0; i < numCluster; i++){
+        for (int i = 0; i < numCluster; i++) {
             centroids[i] = new KmeanFeature(len);
         }
 
@@ -171,7 +171,9 @@ public class KmeanRunner {
                     String centroid = line[1];
                     centroids[centroidId] = new KmeanFeature(centroid.substring(1, centroid.length() - 1));
                     centroidId += 1;
-                    if (centroidId >= numCluster){break;}
+                    if (centroidId >= numCluster) {
+                        break;
+                    }
                 }
                 br.close();
             }

@@ -20,11 +20,11 @@ public class MainRunner {
                     case INIT:
                         ui.runInitUI();
                         break;
-                    case MIN_MAX:
-                        ui.runMinMaxUI();
+                    case NORMALISE:
+                        ui.runNormaliseUI();
                         break;
-                    case MEAN_MED_SD:
-                        ui.runMeanMedSDUI();
+                    case STATS:
+                        ui.runStatsUI();
                         break;
                     case POINT:
                         ui.runPointUI();

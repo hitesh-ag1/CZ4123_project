@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class KmeanReducer extends Reducer<Text, Text, Text, KmeanFeature> {
-    int lengthOfFeature = 12;
+    private int lengthOfFeature = 12;
     @Override
     protected void setup(Reducer<Text, Text, Text, KmeanFeature>.Context context) throws IOException, InterruptedException {
         this.lengthOfFeature = context.getConfiguration().getInt("lengthOfFeature", 12);

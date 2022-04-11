@@ -1,15 +1,12 @@
 package com.ntu.bdm.runner;
 
-import com.ntu.bdm.mapper.MaxMapper;
 import com.ntu.bdm.mapper.OutputMapper;
-import com.ntu.bdm.reducer.MaxReducer;
 import com.ntu.bdm.reducer.OutputReducer;
 import com.ntu.bdm.util.KmeanFeature;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -19,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.util.Arrays;
 
 public class OutputRunner {
     public OutputRunner(String inPath, String outPath, int numCluster) throws IOException, ClassNotFoundException, InterruptedException {

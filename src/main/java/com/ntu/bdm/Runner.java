@@ -14,11 +14,8 @@ public class Runner {
     public static void main(String[] args) throws Exception {
         getCommandLineArguments(args);
         switch (className) {
-            case "max":
-                new MaxRunner(inpath, outpath);
-                break;
             case "mean":
-                new MeanRunner(inpath, outpath);
+                new StatsRunner(inpath, outpath);
                 break;
             case "point":
                 new PointRunner(inpath, outpath);
