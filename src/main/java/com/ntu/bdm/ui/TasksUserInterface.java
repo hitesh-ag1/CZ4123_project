@@ -107,6 +107,7 @@ public class TasksUserInterface {
         ToolRunner.run(new InputFileProcessor(), arg);
     }
 
+    // TODO - Change to NormaliseRunner after merge to main
     void runNormaliseUI() throws Exception {
         String header = "Normalising data and indexing date";
         this.printHeader(header);
