@@ -3,9 +3,9 @@ package com.ntu.bdm.ui;
 public enum Manual {
     STOP("Stop the application"),
     INIT("Convert raw CSV to key value pairs"),
-    MIN_MAX("Find the minimum and maximum"),
-    MEAN_MED_SD("Find the mean, median and standard deviation"),
-    POINT("Convert to Kmean features"),
+    NORMALISE("Run normalisation of data and indexing date"),
+    STATS("Find max, min, mean, median and standard deviation"),
+    POINT("Convert to Kmean feature"),
     SELECTED("Filter and flatten features"),
     KMEAN("Run Kmean clustering");
 

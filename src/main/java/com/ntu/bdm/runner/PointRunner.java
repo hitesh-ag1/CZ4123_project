@@ -1,14 +1,10 @@
 package com.ntu.bdm.runner;
 
-import com.ntu.bdm.mapper.MaxMapper;
 import com.ntu.bdm.mapper.PointMapper;
-import com.ntu.bdm.reducer.MaxReducer;
 import com.ntu.bdm.reducer.PointReducer;
-import com.ntu.bdm.util.KmeanFeature;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -28,7 +24,7 @@ import java.net.InetAddress;
  * Output k,v = SG_TMP_MEAN: 0.1, 0.3, 0.7.....
  * Length of value = #year * 12
  * Use the index in map stage to identify the location in array
-*/
+ */
 public class PointRunner {
     public PointRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
