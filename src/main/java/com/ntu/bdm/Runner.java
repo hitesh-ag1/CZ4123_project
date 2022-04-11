@@ -18,7 +18,7 @@ public class Runner {
                 new StatsRunner(inpath, outpath);
                 break;
             case "point":
-                new PointRunner(inpath, outpath);
+                new PointRunner(inpath, outpath, "/tmp/global");
                 break;
             case "select":
                 new SelectedFieldRunner(inpath, outpath, null);
