@@ -1,16 +1,12 @@
 package com.ntu.bdm.mapper;
 
-import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Mapper;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Date;
 
 
-public class MaxMapper extends Mapper<Object, Text, Text, Text> {
+public class GlobalMinMaxMapper extends Mapper<Object, Text, Text, Text> {
     private final static IntWritable one = new IntWritable(1);
     private Text wordTmp = new Text();
     private Text wordHum =  new Text();

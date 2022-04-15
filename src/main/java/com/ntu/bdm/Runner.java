@@ -1,6 +1,6 @@
 package com.ntu.bdm;
 
-import com.ntu.bdm.runner.MaxRunner;
+import com.ntu.bdm.runner.GlobalMinMaxRunner;
 import com.ntu.bdm.runner.NormRunner;
 import com.ntu.bdm.runner.MeanRunner;
 import com.ntu.bdm.runner.PointRunner;
@@ -8,8 +8,6 @@ import com.ntu.bdm.runner.SelectedFieldRunner;
 import com.ntu.bdm.util.InputFileProcessor;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.util.ToolRunner;
-
-import java.util.Objects;
 
 public class Runner {
     private static String className = "";
@@ -20,8 +18,8 @@ public class Runner {
     public static void main(String[] args) throws Exception {
         getCommandLineArguments(args);
         switch (className) {
-            case "max":
-                new MaxRunner(inpath, outpath);
+            case "global_min_max":
+                new GlobalMinMaxRunner(inpath, outpath);
                 break;
             case "mean":
                 new MeanRunner(inpath, outpath);
@@ -91,7 +89,7 @@ public class Runner {
                 switch (opt_config.toUpperCase()) {
                     case "MAX":
                         System.out.println("Getting maximum for the file");
-                        className = "max";
+                        className = "global_min_max";
                         break;
                     case "MEAN":
                         System.out.println("Getting mean, median and SD for the file");

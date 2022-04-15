@@ -1,7 +1,6 @@
 package com.ntu.bdm.runner;
 
-import com.ntu.bdm.mapper.MaxMapper;
-import com.ntu.bdm.reducer.MaxReducer;
+import com.ntu.bdm.mapper.GlobalMinMaxMapper;
 import com.ntu.bdm.reducer.MeanReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -23,7 +22,7 @@ public class MeanRunner {
         Job job = Job.getInstance(conf, "Min Max Temp");
 
         job.setJarByClass(MeanRunner.class);
-        job.setMapperClass(MaxMapper.class);
+        job.setMapperClass(GlobalMinMaxMapper.class);
         job.setReducerClass(MeanReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FloatWritable.class);

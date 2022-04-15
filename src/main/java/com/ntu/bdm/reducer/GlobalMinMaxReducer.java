@@ -3,13 +3,11 @@ package com.ntu.bdm.reducer;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
-import java.util.Iterator;
 
-public class MaxReducer extends Reducer<Text, Text, Text, Text> {
+public class GlobalMinMaxReducer extends Reducer<Text, Text, Text, Text> {
 
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 

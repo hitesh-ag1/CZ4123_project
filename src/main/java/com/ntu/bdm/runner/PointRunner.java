@@ -1,14 +1,10 @@
 package com.ntu.bdm.runner;
 
-import com.ntu.bdm.mapper.MaxMapper;
 import com.ntu.bdm.mapper.PointMapper;
-import com.ntu.bdm.reducer.MaxReducer;
 import com.ntu.bdm.reducer.PointReducer;
-import com.ntu.bdm.util.KmeanFeature;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
