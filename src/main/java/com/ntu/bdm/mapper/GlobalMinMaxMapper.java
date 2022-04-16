@@ -34,7 +34,7 @@ public class GlobalMinMaxMapper extends Mapper<Object, Text, Text, Text> {
         wordHum.set("HUM");
         context.write(wordHum, new Text(String.valueOf(humidity)));
 
-        wordHum.set("WS");
+        wordWs.set("WS");
         context.write(wordWs, new Text(String.valueOf(windspeed)));
 
         wordDate.set("DATE");
