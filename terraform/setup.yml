@@ -141,6 +141,10 @@
       get_url:
         url: "https://drive.google.com/u/0/uc?id=1AtpmIoY6o7kynwWGhYs2bGAk81HPqHJb&export=download"
         dest: ~/exampleWithIndex.csv
+    - name: Download weather data
+      get_url:
+        url: "https://drive.google.com/u/0/uc?id=1b4J7DbF9XA8raha9e6exjG6oZ7gqPoEM&export=download"
+        dest: ~/weatherData.csv
 
 - hosts: masters
   tasks:
