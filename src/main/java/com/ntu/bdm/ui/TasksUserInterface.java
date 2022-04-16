@@ -108,8 +108,6 @@ public class TasksUserInterface {
         ToolRunner.run(new InputFileProcessor(), arg);
     }
 
-    // TODO - Change to NormaliseRunner after merge to
-    // Hard code inpath2 to be globalStats
     void runNormaliseUI() throws Exception {
         String header = "Normalising data and indexing date";
         this.printHeader(header);
@@ -123,8 +121,8 @@ public class TasksUserInterface {
             outPath = "CZ4123/normalised";
         }
         printTask(header, inPath, outPath);
-        String[] arg = {inPath, outPath, "4"};
-        ToolRunner.run(new InputFileProcessor(), arg);
+        new GlobalMinMaxRunner(inPath, globalStats);
+        new NormRunner(inPath, outPath, globalStats);
     }
 
 
@@ -135,7 +133,7 @@ public class TasksUserInterface {
         String outPath = this.askPath("Output");
 
         if (inPath.isEmpty()) {
-            inPath = "CZ4123/normalise";
+            inPath = "CZ4123/normalised";
         }
         if (outPath.isEmpty()) {
             outPath = "CZ4123/stats/";

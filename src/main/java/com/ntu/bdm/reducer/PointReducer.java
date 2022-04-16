@@ -20,7 +20,7 @@ public class PointReducer extends Reducer<Text, Text, Text, Text> {
             String[] v = value.toString().split("_");
             int idx = Integer.parseInt(v[0]);
             float f = Float.parseFloat(v[1]);
-            point.set(idx-1, f);
+            point.set(idx, f);
         }
         context.write(key, new Text(point.toString()));
     }
