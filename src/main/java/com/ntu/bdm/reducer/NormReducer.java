@@ -54,10 +54,10 @@ public class NormReducer extends Reducer<Text, Text, Text, Text> {
                     break;
             }
         }
-        String output = String.format("%s,%s,%s", floatTemp, floatHum, floatWs);
-        String newValue = station + "," + currInd + ",";
-        context.write(new Text("Normalized:"), new Text(newValue + output));
-    }
+            String output = String.format("%s,%s,%s", floatTemp, floatHum, floatWs);
+            String newValue = station + "," + currInd + ",";
+            context.write(new Text("Normalized:"), new Text(newValue + output));
+        }
 
     private String transformIndex(int currDate, int minDate) {
         int minYear = minDate / 100;
