@@ -3,6 +3,7 @@ package com.ntu.bdm.runner;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 
 import com.ntu.bdm.mapper.NormMapper;
 import com.ntu.bdm.reducer.NormReducer;
@@ -10,9 +11,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -20,10 +19,11 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class NormRunner {
     public NormRunner(String inPath, String outPath, String inPath2) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        conf.set("fs.default.name", "hdfs://54.169.249.35:9000");
-        conf.set("yarn.resourcemanager.hostname", "54.169.249.35"); // see step 3
+        String ip = InetAddress.getLocalHost().toString().split("/")[1];
+        conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
+        conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
-        conf = getMinMax(inPath2, conf);
+        getMinMax(inPath2, conf);
         Job job = Job.getInstance(conf, "Normalization");
 
         job.setJarByClass(NormRunner.class);
@@ -47,10 +47,10 @@ public class NormRunner {
 //        float tempMin = conf.getFloat("TMPMin", 0);
 //        System.out.println("TestMinDate "+ mindate);
 //        System.out.println("HUMMax "+ humMax);
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        job.waitForCompletion(true);
     }
 
-    private Configuration getMinMax(String inPath2, Configuration conf) throws IOException {
+    private void getMinMax(String inPath2, Configuration conf) throws IOException {
         FileSystem hdfs = FileSystem.get(conf);
         FileStatus[] statuses = hdfs.listStatus(new Path(inPath2));
 //        System.out.println("Reading MinMax");
@@ -79,10 +79,8 @@ public class NormRunner {
                     }
 
                 }
-                    br.close();
-                }
+                br.close();
             }
-        return conf;
-
+        }
     }
 }
