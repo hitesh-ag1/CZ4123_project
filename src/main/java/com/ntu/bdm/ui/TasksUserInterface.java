@@ -34,7 +34,7 @@ public class TasksUserInterface {
     }
 
     private String askPath(String description) {
-        System.out.println("Press ENTER if you want to use default path CZ4123");
+        System.out.println("Press ENTER if you want to use default path ~/CZ4123");
         return SafeScanner.readLine(String.format("Enter %s Path = ", description));
     }
 
