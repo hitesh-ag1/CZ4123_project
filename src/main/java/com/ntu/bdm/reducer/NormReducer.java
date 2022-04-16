@@ -50,7 +50,7 @@ public class NormReducer extends Reducer<Text, Text, Text, Text> {
                     floatHum = (floatVal - humMin) / (humMax - humMin);
                     break;
                 case "W":
-                    floatHum = (floatVal - wsMin) / (wsMax - wsMin);
+                    floatWs = (floatVal - wsMin) / (wsMax - wsMin);
                     break;
             }
             String output = String.format("%s,%s,%s", floatTemp, floatHum, floatWs);

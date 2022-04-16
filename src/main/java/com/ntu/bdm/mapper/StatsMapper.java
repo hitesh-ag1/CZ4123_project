@@ -37,7 +37,7 @@ public class StatsMapper extends Mapper<Object, Text, Text, FloatWritable> {
         wordHum.set(yearMonth + "_" + location + "_HUM");
         context.write(wordHum, new FloatWritable(humidity));
 
-        wordHum.set(yearMonth + "_" + location + "_WS");
+        wordWs.set(yearMonth + "_" + location + "_WS");
         context.write(wordWs, new FloatWritable(windspeed));
     }
 }
