@@ -11,6 +11,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 
 /*
@@ -23,12 +24,13 @@ import java.io.IOException;
  * Output k,v = SG_TMP_MEAN: 0.1, 0.3, 0.7.....
  * Length of value = #year * 12
  * Use the index in map stage to identify the location in array
-*/
+ */
 public class PointRunner {
     public PointRunner(String inPath, String outPath) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        conf.set("fs.default.name","hdfs://54.169.249.35:9000");
-        conf.set("yarn.resourcemanager.hostname", "54.169.249.35"); // see step 3
+        String ip = InetAddress.getLocalHost().toString().split("/")[1];
+        conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
+        conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
         Job job = Job.getInstance(conf, "ConvertToPoint");
 
@@ -45,6 +47,6 @@ public class PointRunner {
         FileInputFormat.addInputPath(job, new Path(inPath));
 //      KeyValueTextInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        job.waitForCompletion(true);
     }
 }

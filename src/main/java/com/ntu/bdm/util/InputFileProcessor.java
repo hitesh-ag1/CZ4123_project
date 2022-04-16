@@ -14,6 +14,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import java.net.InetAddress;
+
 public class InputFileProcessor extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
@@ -27,9 +29,10 @@ public class InputFileProcessor extends Configured implements Tool {
 //  Set RecordLenght configuration parameter so that is it accessible to
 //  individual mappers
         Configuration conf = getConf();
-        conf.set("yarn.resourcemanager.hostname", "54.169.249.35"); // see step 3
+        String ip = InetAddress.getLocalHost().toString().split("/")[1];
+        conf.set("fs.default.name", String.format("hdfs://%s:9000", ip));
+        conf.set("yarn.resourcemanager.hostname", ip); // see step 3
         conf.set("mapreduce.framework.name", "yarn");
-        conf.set("fs.default.name","hdfs://54.169.249.35:9000");
         String inPath = args[0];
         String outPath = args[1];
         Job job = Job.getInstance(conf, "Input Format");
