@@ -47,9 +47,18 @@ public class KmeanRunner {
         conf.setInt("numCluster", numCluster);
         conf.setInt("lengthOfFeature", lengthOfFeature);
         KmeanFeature[] newCentroid;
+
+        HashMap<String, Boolean> initLoc = new HashMap<>();
+        initLoc.put("WMSA", true);
+        initLoc.put("BVU", true);
+        initLoc.put("CYXX", true);
+        initLoc.put("PADL", true);
+        initLoc.put("BGGH", true);
+
+
         if (randomCentroidInit)
             newCentroid = generateCentroid(lengthOfFeature, numCluster);
-        else newCentroid = readPointAsCentroid(inPath, conf, numCluster);
+        else newCentroid = readPointAsCentroid(inPath, conf, numCluster, initLoc);
 
         for (int i = 0; i < numCluster; i++) {
             conf.unset("centroid-" + i);
@@ -161,7 +170,7 @@ public class KmeanRunner {
         return old;
     }
 
-    private KmeanFeature[] readPointAsCentroid(String inPath, Configuration conf, int numCluster) throws IOException {
+    private KmeanFeature[] readPointAsCentroid(String inPath, Configuration conf, int numCluster, HashMap<String, Boolean> initLoc) throws IOException {
         FileSystem hdfs = FileSystem.get(conf);
         FileStatus[] statuses = hdfs.listStatus(new Path(inPath));
         KmeanFeature[] centroids = new KmeanFeature[numCluster];
@@ -177,11 +186,13 @@ public class KmeanRunner {
                 int centroidId = 0;
                 while (br.ready()) {
                     String[] line = br.readLine().split("\\t");
-                    String centroid = line[1];
-                    centroids[centroidId] = new KmeanFeature(centroid.substring(1, centroid.length() - 1));
-                    centroidId += 1;
-                    if (centroidId >= numCluster) {
-                        break;
+                    if (initLoc.containsKey(line[0])) {
+                        String centroid = line[1];
+                        centroids[centroidId] = new KmeanFeature(centroid.substring(1, centroid.length() - 1));
+                        centroidId += 1;
+                        if (centroidId >= numCluster) {
+                            break;
+                        }
                     }
                 }
                 br.close();

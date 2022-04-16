@@ -98,7 +98,7 @@ public class TasksUserInterface {
         String outPath = this.askPath("Output");
 
         if (inPath.isEmpty()) {
-            inPath = "CZ4123/input/exampleWithIndex.csv";
+            inPath = "CZ4123/input/weatherData.csv";
         }
         if (outPath.isEmpty()) {
             outPath = "CZ4123/intermediate";
