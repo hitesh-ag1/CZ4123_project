@@ -5,9 +5,10 @@ import com.ntu.bdm.util.InputFileProcessor;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TasksUserInterface {
+    private String globalStats = "/tmp/global";
+
     public TasksUserInterface() {
     }
 
@@ -79,11 +80,11 @@ public class TasksUserInterface {
         return stats[choice].name();
     }
 
-    private ArrayList<String> askCriterion(){
+    private ArrayList<String> askCriterion() {
         printHeader("Choose the field and stats");
         ArrayList<String> res = new ArrayList<>();
         int choice = 1;
-        while (choice == 1){
+        while (choice == 1) {
             res.add(askField() + "_" + askStats());
             choice = SafeScanner.readInt("Put 1 to add more, 0 to stop = ");
         }
@@ -107,7 +108,6 @@ public class TasksUserInterface {
         ToolRunner.run(new InputFileProcessor(), arg);
     }
 
-    // TODO - Change to NormaliseRunner after merge to main
     void runNormaliseUI() throws Exception {
         String header = "Normalising data and indexing date";
         this.printHeader(header);
@@ -121,8 +121,8 @@ public class TasksUserInterface {
             outPath = "CZ4123/normalised";
         }
         printTask(header, inPath, outPath);
-        String[] arg = {inPath, outPath, "4"};
-        ToolRunner.run(new InputFileProcessor(), arg);
+        new GlobalMinMaxRunner(inPath, globalStats);
+        new NormRunner(inPath, outPath, globalStats);
     }
 
 
@@ -133,7 +133,7 @@ public class TasksUserInterface {
         String outPath = this.askPath("Output");
 
         if (inPath.isEmpty()) {
-            inPath = "CZ4123/normalise";
+            inPath = "CZ4123/normalised";
         }
         if (outPath.isEmpty()) {
             outPath = "CZ4123/stats/";
@@ -155,7 +155,7 @@ public class TasksUserInterface {
             outPath = "CZ4123/points";
         }
         printTask(header, inPath, outPath);
-        new PointRunner(inPath, outPath);
+        new PointRunner(inPath, outPath, globalStats);
     }
 
     void runSelectedFieldUI() throws Exception {
@@ -172,7 +172,7 @@ public class TasksUserInterface {
             outPath = "CZ4123/selected";
         }
 
-        if (criterion.size() == 0){
+        if (criterion.size() == 0) {
             criterion.add("TMP_MAX");
             criterion.add("HUM_MAX");
         }
