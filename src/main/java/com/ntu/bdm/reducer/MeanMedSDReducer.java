@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MeanReducer extends Reducer<Text, FloatWritable, Text, Text> {
+public class MeanMedSDReducer extends Reducer<Text, FloatWritable, Text, Text> {
     public void reduce(Text key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
         float sum = 0F;
         float sqrSum = 0F;
@@ -17,9 +17,12 @@ public class MeanReducer extends Reducer<Text, FloatWritable, Text, Text> {
         List<Float> list = new ArrayList<>();
         for (FloatWritable value : values) {
             float curVal = value.get();
-            sum += curVal;
-            count += 1;
-            list.add(curVal);
+            if (!Float.isNaN(curVal)) {
+                sum += curVal;
+                count += 1;
+                list.add(curVal);
+            }
+
         }
 
         Collections.sort(list);
@@ -33,7 +36,7 @@ public class MeanReducer extends Reducer<Text, FloatWritable, Text, Text> {
 
         float mean = sum / count;
 
-        for (float f : list){
+        for (float f : list) {
             float diff = f - mean;
             sqrSum += diff * diff;
         }
@@ -46,7 +49,7 @@ public class MeanReducer extends Reducer<Text, FloatWritable, Text, Text> {
         System.out.printf("Median: %s\n", median);
         System.out.printf("SD: %s\n", sd);
 
-        String output = String.format("%s,%s,%s", mean, median,sd);
+        String output = String.format("%s,%s,%s", mean, median, sd);
         context.write(key, new Text(output));
     }
 }

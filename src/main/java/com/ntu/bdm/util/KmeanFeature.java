@@ -5,11 +5,10 @@ import org.apache.hadoop.io.Writable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class KmeanFeature implements Writable {
-
-    // TODO - Initialise to array of size = numMonths
     private float[] array;
     private int numPoints;
 
@@ -35,6 +34,11 @@ public class KmeanFeature implements Writable {
         this.array[idx] = val;
     }
 
+    public static KmeanFeature duplicate(KmeanFeature p){
+        KmeanFeature res = new KmeanFeature(Arrays.copyOf(p.array, p.array.length));
+        return res;
+    }
+
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         for (float f: array){
@@ -49,25 +53,31 @@ public class KmeanFeature implements Writable {
         }
     }
 
-    private float distance(KmeanFeature point){
+    public float distance(KmeanFeature point){
         float dist = 0F;
+        int ctr = 0;
         for (int i = 0; i < this.array.length; i++){
-            dist += (this.array[i] - point.array[i]);
+            if (!Float.isNaN(point.array[i]) & !Float.isNaN(this.array[i])){
+                ctr += 1;
+                dist += Math.abs(this.array[i] - point.array[i]);
+            }
         }
-        return dist;
+        return dist / (float) ctr;
     }
 
-    private void sum(KmeanFeature point){
-        for (int i = 0; i < this.array.length; i++){
-            this.array[i] += point.array[i];
-        }
-        this.numPoints += point.numPoints;
-    }
 
-    private void calculateCentroid(){
-        for (int i = 0; i < this.array.length; i++){
-            float temp = this.array[i] / this.numPoints;
-            this.array[i] = temp;
+    public void calculateCentroid(ArrayList<KmeanFeature> points){
+        if (points.isEmpty()) return;
+        for (int j = 0; j < points.get(0).array.length; j++){
+            float sum = 0F;
+            int ctr = 0;
+            for (int i = 0; i < points.size(); i++){
+                if (!Float.isNaN(points.get(i).array[j])){
+                    sum += points.get(i).array[j];
+                    ctr += 1;
+                }
+                this.array[j] = sum / (float) ctr;
+            }
         }
         this.numPoints = 1;
     }
