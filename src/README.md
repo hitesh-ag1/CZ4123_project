@@ -7,6 +7,8 @@
 # Arguments
 | Argument | Description          | Default | Examples                             |
 |----------|----------------------|---------|--------------------------------------|
-| -c       | Class name to run    | -       | init, max, min, cluster              |
+| -c       | Class name to run    | -       | init, max, min, cluster, norm        |
 | -i       | Input file location  | -       | /user/input, /user/intermediate/max  |
 | -o       | Output file location | -       | /user/output, /user/intermediate/max |
+| -i2      | Input file 2         | -       | /intermediate                        |
+
