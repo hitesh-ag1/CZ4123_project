@@ -213,7 +213,8 @@ public class TasksUserInterface {
 
     enum Field {
         TMP("Temperature"),
-        HUM("Humidity");
+        HUM("Humidity"),
+        WS("Wind Speed");
 
         private final String description;
 

@@ -9,9 +9,10 @@ import java.io.IOException;
 
 
 public class StatsMapper extends Mapper<Object, Text, Text, FloatWritable> {
-    private final static IntWritable one = new IntWritable(1);
     private Text wordTmp = new Text();
     private Text wordHum = new Text();
+    private Text wordWs = new Text();
+
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
         System.out.printf("Key: %s \n", key);
@@ -23,8 +24,11 @@ public class StatsMapper extends Mapper<Object, Text, Text, FloatWritable> {
         String location = stringArr[0];
         if (stringArr[2].equals("M")) stringArr[2] = "NaN";
         if (stringArr[3].equals("M")) stringArr[3] = "NaN";
+        if (stringArr[4].equals("M")) stringArr[4] = "NaN";
         float temp = Float.parseFloat(stringArr[2]);
         float humidity = Float.parseFloat(stringArr[3]);
+        float windspeed = Float.parseFloat(stringArr[4]);
+
 
 
         wordTmp.set(yearMonth + "_" + location + "_TMP");
@@ -32,5 +36,8 @@ public class StatsMapper extends Mapper<Object, Text, Text, FloatWritable> {
 
         wordHum.set(yearMonth + "_" + location + "_HUM");
         context.write(wordHum, new FloatWritable(humidity));
+
+        wordHum.set(yearMonth + "_" + location + "_WS");
+        context.write(wordWs, new FloatWritable(windspeed));
     }
 }

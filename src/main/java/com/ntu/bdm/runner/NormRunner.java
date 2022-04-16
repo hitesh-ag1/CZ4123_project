@@ -39,14 +39,6 @@ public class NormRunner {
 //      KeyValueTextInputFormat.addInputPath(job, new Path(inPath));
         FileOutputFormat.setOutputPath(job, new Path(outPath));
 
-
-//        int mindate = conf.getInt("date", 200001);
-//        float humMax = conf.getFloat("HUMMax", 0);
-//        float humMin = conf.getFloat("HUMMin", 0);
-//        float tempMax = conf.getFloat("TMPMax", 0);
-//        float tempMin = conf.getFloat("TMPMin", 0);
-//        System.out.println("TestMinDate "+ mindate);
-//        System.out.println("HUMMax "+ humMax);
         job.waitForCompletion(true);
     }
 

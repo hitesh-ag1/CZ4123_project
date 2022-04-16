@@ -10,8 +10,6 @@ import java.io.IOException;
 public class GlobalMinMaxReducer extends Reducer<Text, Text, Text, Text> {
 
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-
-
         System.out.println((key).toString());
         System.out.println((key).toString().equals("DATE"));
         if(!(key).toString().equals("DATE")){
