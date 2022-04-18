@@ -67,8 +67,11 @@ public class PointRunner {
                     if (line[0].equals("DATE")) {
                         br.close();
                         String[] range2 = line[1].split(",");
-                        return (Integer.parseInt(range2[0].substring(0, 4)) -
-                                Integer.parseInt(range2[1].substring(0, 4)) + 1) * 12;
+                        // (maxYr - minYr) * 12 + maxMonth - minMonth + 1
+                        return ((Integer.parseInt(range2[0].substring(0, 4)) -
+                                Integer.parseInt(range2[1].substring(0, 4))) * 12) +
+                                Integer.parseInt(range2[0].substring(4, 6)) -
+                                Integer.parseInt(range2[1].substring(4, 6))  + 1;
                     }
                 }
                 br.close();
